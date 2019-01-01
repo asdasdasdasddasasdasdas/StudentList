@@ -3,7 +3,8 @@
   <p class="h4 mb-4 text-center">Profile</p>
 <div class="row row mt-5">
   <div class="col-lg-6 ">
-<input id="inputLGEx" class="form-control " type="text" name="name"  value="<?php echo htmlspecialchars($student['name'],ENT_QUOTES) ;?>">
+    <label class = "label" for="">Name:</label>
+<input id="inputLGEx" class="form-control " type="text" name="name"  value="<?=$student['name'];?>">
   </div>
   <div class="col-lg-6">
  <span class ="text-danger"><?= $errors['name_error']; ?></span>
@@ -11,7 +12,7 @@
 </div>
 <div class="row mt-5">
   <div class="col-lg-6">
-
+  <label class = "label" for="">Surname:</label>
     <input id="inputLGEx" class="form-control " type="text" name="surname" value=<?=$student['surname']?>>
   </div>
   <div class="col-lg-6">
@@ -20,6 +21,7 @@
 </div>
 <div class="row  mt-5">
   <div class="col-lg-6">
+      <label class = "label" for="">Group:</label>
 <input id="inputLGEx" class="form-control " type="text" name="group" value=<?=$student['groupa']?>>
   </div>
   <div class="col-lg-6">
@@ -28,6 +30,7 @@
 </div>
 <div class="row  mt-5">
   <div class="col-lg-6">
+      <label class = "label" for="">Ege:</label>
 <input  id="inputLGEx" class="form-control "  type="number" name="balli" value=<?=$student['balli'] ?>>
   </div>
   <div class="col-lg-6">
@@ -36,6 +39,7 @@
 </div>
 <div class="row mt-5">
   <div class="col-lg-6">
+      <label class = "label" for="">Email:</label>
 <input id="inputLGEx" class="form-control " type="email" name="email" value=<?=$student['email'] ?>>
   </div>
   <div class="col-lg-6">

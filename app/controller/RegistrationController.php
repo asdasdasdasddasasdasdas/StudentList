@@ -25,9 +25,8 @@ if(!$this->auth->checkHash()){
 
   $student = new Student($post);
 
+if (isset($_POST['submit'])) {
   $errors = $this->validator->ValidateAll($student);
-
-
 if($errors['name_error']==null and $errors['surname_error']==null and $errors['group_error']==null and $errors['gender_error']==null and
  $errors['balli_error']==null and $errors['email_error']==null){
   $student->generateHash();
@@ -35,6 +34,7 @@ if($errors['name_error']==null and $errors['surname_error']==null and $errors['g
   $this->auth->Cookie($student->hash);
   header("Location:http://test.com/profile");die();
 
+}
 }
 }
 else{

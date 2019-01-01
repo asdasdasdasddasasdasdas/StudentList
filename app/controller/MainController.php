@@ -20,21 +20,24 @@ protected $paginator;
 
 public function mainAction()
 {
+  $search= $_GET['search'];
+  $keyword = "%$search%";
+
   $limit = 5;
-$this->countStudents = $this->model->countAllStudent();
-$this->paginator->countPage($this->countStudents);
-$_GET['page'] = $_GET['page']==null?1:$_GET['page'];
-$this->paginator->setCurrentPage($_GET['page']);
+  $this->countStudents =$_GET['search']!==null? $this->model->countStudentsBySearch($keyword):$this->model->countAllStudent();
+  $this->paginator->countPage($this->countStudents);
+  $_GET['page'] = $_GET['page']==null?1:$_GET['page'];
+  $this->paginator->setCurrentPage($_GET['page']);
 
 
-$offset = $limit*($_GET['page']-1);
+  $offset = $limit*($_GET['page']-1);
+    $this->auth->checkHash();
 
-  $this->auth->checkHash();
-$students = $this->model->getAllStudents($offset,$limit);
+$students =$_GET['search']!==null?$this->model->SearchStudents($offset,$limit,$keyword):$this->model->GetStudents($offset,$limit);
+$this->render('app/view/main/main.php',['students'=>$students, 'search'=>$search]);
 
 
 
-$this->render('app/view/main/main.php',$students);
 
   }
 }

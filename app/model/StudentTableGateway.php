@@ -6,10 +6,7 @@ protected $db;
 
   function __construct(){
 $config = require 'app/config/db.php';
-$this->db = new PDO('mysql:host='.$config['host'].';dbname='.$config['name'].';',$config['user'],$config['password'],[
-      PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-      PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-    ]);
+$this->db = new PDO('mysql:host='.$config['host'].';dbname='.$config['name'].';',$config['user'],$config['password']);
 }
 private function query($sql,$params=[]){
 
@@ -29,12 +26,26 @@ $stmt->execute();
 
 return $stmt;
 }
-public function getAllStudents($offset,$limit){
+public function countStudentsBySearch($keyword){
+  $result=$this->query("SELECT COUNT(*) FROM students WHERE name LIKE :keyword",['keyword'=>$keyword]);
+
+  return $result->fetchColumn();
+
+}
+public function SearchStudents($offset,$limit,$keyword){
+$stmt=$this->db->prepare("SELECT * FROM students WHERE name LIKE :keyword LIMIT :limit OFFSET :offset");
+  $stmt->bindValue(':limit',$limit,PDO::PARAM_INT);
+  $stmt->bindValue(':offset',$offset,PDO::PARAM_INT);
+  $stmt->bindValue(':keyword',$keyword);
+  $stmt->execute();
+  return $stmt->fetchAll();
+}
+public function GetStudents($offset,$limit){
 $stmt=$this->db->prepare("SELECT * FROM students LIMIT :limit OFFSET :offset");
   $stmt->bindValue(':limit',$limit,PDO::PARAM_INT);
   $stmt->bindValue(':offset',$offset,PDO::PARAM_INT);
   $stmt->execute();
-  return $stmt->fetchAll();
+  return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 public function countAllStudent(){
 $result = $this->query("SELECT COUNT(*) FROM students");

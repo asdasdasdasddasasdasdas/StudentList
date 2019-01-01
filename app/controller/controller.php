@@ -3,10 +3,10 @@ namespace app\controller;
 
 abstract class Controller
 {
-  public function render($path,$params=[])
+   public function render($path,$params=[])
   {
     extract($params,EXTR_SKIP);
 
-    require "app/view/layouts/def.php";
+    require_once "app/view/layouts/def.php";
   }
 }

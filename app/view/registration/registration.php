@@ -6,6 +6,8 @@
   <div class="row mt-5">
 
 <div class="col-lg-6">
+  <label class = "label" for="">Name:</label>
+
   <input type="text" class="form-control" name="name" placeholder="Name">
 </div>
 
@@ -15,6 +17,7 @@
   </div>
   <div class="row mt-5">
 <div class="col-lg-6">
+  <label class = "label" for="">Surname:</label>
   <input type="text" class="form-control" name="surname" placeholder="Surname">
 </div>
 <div class="col-lg-6">
@@ -23,6 +26,7 @@
   </div>
   <div class="row mt-5">
     <div class="col-lg-6">
+      <label class = "label" for="">Group:</label>
       <input type="text" class="form-control" name="group" placeholder="Group">
     </div>
     <div class="col-lg-6 test">
@@ -31,6 +35,7 @@
   </div>
   <div class="row mt-5">
     <div class="col-lg-6">
+      <label class = "label" for="">Ege:</label>
       <input type="number" class="form-control" name="balli" placeholder="Ege">
     </div>
     <div class="col-lg-6">
@@ -39,6 +44,7 @@
   </div>
   <div class="row mt-5">
     <div class="col-lg-6">
+      <label class = "label" for="">Email:</label>
       <input type="email" class="form-control" name="email" placeholder="Email">
     </div>
     <div class="col-lg-6">
