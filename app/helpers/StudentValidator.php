@@ -20,9 +20,8 @@ public function ValidateAll($student)
   $this->errors['gender_error']=$this->ValidateGender($student->female,$student->male);
   $this->errors['balli_error']=$this->ValidateBalli($student->balli);
   $this->errors['email_error']=$this->ValidateEmail($student->email);
-
   return array_filter($this->errors, function($value) {
-         return $value !== true;
+         return $value !== null;
      });
 }
 public function ValidateName( $name)
@@ -68,6 +67,9 @@ private function ValidateEmail( $email)
 
             return "E-mail должен быть в формате \"asdasd@domain.com\".";
         }
+  elseif($this->db->CheckEmail($email)){
+    return "Такой E-mail уже сущестует";
+  }
 }
 private function ValidateGroup($group)
 {

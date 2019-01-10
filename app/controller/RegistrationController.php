@@ -17,32 +17,37 @@ $this->auth = $auth;
 
 public function mainAction()
 {
-
-
-if(!$this->auth->checkHash()){
-
-  $post = $this->grabPostValues();
-
-  $student = new Student($post);
-
-if (isset($_POST['submit'])) {
-  $errors = $this->validator->ValidateAll($student);
-if($errors['name_error']==null and $errors['surname_error']==null and $errors['group_error']==null and $errors['gender_error']==null and
- $errors['balli_error']==null and $errors['email_error']==null){
-  $student->generateHash();
-  $this->model->addStudent($student);
-  $this->auth->Cookie($student->hash);
-  header("Location:http://test.com/profile");die();
-
-}
-}
+  if(!$this->auth->checkHash()){
+$this->render('app/view/registration/registration.php');
 }
 else{
     header("Location:http://test.com/profile");die();
 }
-$this->render('app/view/registration/registration.php',['errors'=>$errors]);
+
 }
 
+public function storeAction()
+{
+  if(!$this->auth->checkHash()){
+    $_SESSION['post']= $this->grabPostValues();
+
+    $student = new Student($_SESSION['post']);
+
+    $_SESSION['errors'] = $this->validator->ValidateAll($student);
+
+  if(empty($_SESSION['errors'])){
+
+    $student->generateHash();
+
+    $this->model->addStudent($student);
+
+    $this->auth->Cookie($student->hash);
+
+  }
+
+}
+  header("Location:http://test.com/profile");die();
+}
 
 private function grabPostValues()
 {

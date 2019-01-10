@@ -20,29 +20,32 @@ private $validator;
 
     if($this->auth->checkHash())
     {
-    $result = $this->model->getStudentByHash($_COOKIE['hash']);
-    if(isset($_POST['submit']))
-    {
-    $post = $this->getPostValues();
-   $student = new Student($post);
-   $student->setHash($result['hash']);
-    $errors = $this->validator->ValidateAll($student);
 
-         if($errors['name_error']==null and $errors['surname_error']==null and $errors['group_error']==null and $errors['gender_error']==null
-          and $errors['balli_error']==null and $errors['email_error']==null)
-          {
-           $this->model->updateStudent($student);
-          header("Location:/profile");die();
-          }
+$this->render('app/view/profile/profile.php',['student'=>$this->model->getStudentByHash($_COOKIE['hash']),'errors'=>$errors]);
 }
-    }
-    else
+     else
     {
       header("Location:/registration");die();
-    }
-$this->render('app/view/profile/profile.php',['student'=>$result,'errors'=>$errors]);
+}
+
   }
 
+  public function storeAction(){
+
+
+
+
+   $student = new Student($this->getPostValues());
+   $student->setHash($_COOKIE['hash']);
+    $_SESSION['errors'] = $this->validator->ValidateAll($student);
+
+         if(empty($_SESSION['errors']))
+          {
+           $this->model->updateStudent($student);
+          }
+
+          header("Location:/profile");die();
+}
   private function getPostValues()
   {
       $values = [];

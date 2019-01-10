@@ -1,5 +1,5 @@
 
-<form  method="post" class = "border border-light">
+<form  method="post" action="/profile/store" class = "border border-light">
   <p class="h4 mb-4 text-center">Profile</p>
 <div class="row row mt-5">
   <div class="col-lg-6 ">
@@ -7,7 +7,7 @@
 <input id="inputLGEx" class="form-control " type="text" name="name"  value="<?=$student['name'];?>">
   </div>
   <div class="col-lg-6">
- <span class ="text-danger"><?= $errors['name_error']; ?></span>
+ <span class ="text-danger"><?= $_SESSION['errors']['name_error']; ?></span>
   </div>
 </div>
 <div class="row mt-5">
@@ -16,7 +16,7 @@
     <input id="inputLGEx" class="form-control " type="text" name="surname" value=<?=$student['surname']?>>
   </div>
   <div class="col-lg-6">
-<span class ="text-danger"><?= $errors['surname_error']; ?></span><br>
+<span class ="text-danger"><?= $_SESSION['errors']['surname_error']; ?></span><br>
   </div>
 </div>
 <div class="row  mt-5">
@@ -25,7 +25,7 @@
 <input id="inputLGEx" class="form-control " type="text" name="group" value=<?=$student['groupa']?>>
   </div>
   <div class="col-lg-6">
-<span class ="text-danger"><?= $errors['group_error']; ?></span><br>
+<span class ="text-danger"><?= $_SESSION['errors']['group_error']; ?></span><br>
   </div>
 </div>
 <div class="row  mt-5">
@@ -34,7 +34,7 @@
 <input  id="inputLGEx" class="form-control "  type="number" name="balli" value=<?=$student['balli'] ?>>
   </div>
   <div class="col-lg-6">
-<span class ="text-danger"><?= $errors['balli_error']; ?></span><br>
+<span class ="text-danger"><?= $_SESSION['errors']['balli_error']; ?></span><br>
   </div>
 </div>
 <div class="row mt-5">
@@ -43,7 +43,7 @@
 <input id="inputLGEx" class="form-control " type="email" name="email" value=<?=$student['email'] ?>>
   </div>
   <div class="col-lg-6">
-<span class ="text-danger"><?= $errors['email_error']; ?></span><br>
+<span class ="text-danger"><?= $_SESSION['errors']['email_error']; ?></span><br>
   </div>
 </div>
 <div class="row  mt-5">
@@ -54,7 +54,7 @@
     <label class="h6" for="gender">Male</label>
   </div>
   <div class="col-lg-6">
-<span class ="text-danger"><?= $errors['gender_error']; ?></span><br>
+<span class ="text-danger"><?= $_SESSION['errors']['gender_error']; ?></span><br>
   </div>
 </div>
 

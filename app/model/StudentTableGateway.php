@@ -87,8 +87,11 @@ $this->query("UPDATE students SET name=:name,surname=:surname, balli=:balli, gro
 }
 public function CheckEmail(string $email){
 $result = $this->query("SELECT * FROM student WHERE email=$email");
-if($result!=null){
+if($result!==null){
   return true;
+}
+else{
+  return false;
 }
 }
 }

@@ -20,7 +20,7 @@ protected $paginator;
 
 public function mainAction()
 {
-  $search= $_GET['search'];
+  $search=htmlspecialchars($_GET['search']);
   $keyword = "%$search%";
 
   $limit = 5;

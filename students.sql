@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Янв 01 2019 г., 16:00
+-- Время создания: Янв 10 2019 г., 20:35
 -- Версия сервера: 5.7.23
 -- Версия PHP: 7.2.10
 
@@ -54,7 +54,8 @@ INSERT INTO `students` (`hash`, `id`, `name`, `surname`, `balli`, `groupa`, `ema
 ('225917660732b8b7f040846afb04bbfc651c250f3bdc510e72fc939711187c32', 23, 'Антон', 'Белов', 256, 'аа2', 'asrtry@gmail.com', 0, 1),
 ('0b51c9b14d3621107a581c94d03f9cce12eac98cae0604335be67f24b0d669f6', 24, 'Михаил', 'Калугин', 221, 'пп5', 'bvfg@example.com', 1, 0),
 ('ad46f898191f4b207c6f6e18615b704a2e66bb0ce6e7b2e71a274093d2e42eb8', 25, 'Михаил', 'Дюма', 112, 'пп2', 'asdwer@example.com', 1, 0),
-('fabd753520e59c21d243cdf6d256c59d55cf7d312dd2c00a21d0bc313afd4caa', 26, 'Михаил', 'Зюганов', 123, 'аа2', 'example@example.com', 1, 0);
+('fabd753520e59c21d243cdf6d256c59d55cf7d312dd2c00a21d0bc313afd4caa', 26, 'Михаил', 'Зюганов', 123, 'аа2', 'example@example.com', 1, 0),
+('62a198259cbf55509f134a5ce6d1f9953606eff4405745cfd72a7abac04479b1', 27, 'asd', 'ads', 213, 'asd', 'wsadawalek@mail.ru', 1, 0);
 
 --
 -- Индексы сохранённых таблиц
@@ -75,7 +76,7 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT для таблицы `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

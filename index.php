@@ -1,6 +1,6 @@
 <?php
+session_start() ;
 
-declare(strict_types=1);
 require 'app/config/debug.php';
 use app\core\Router;
 spl_autoload_register(function($class){

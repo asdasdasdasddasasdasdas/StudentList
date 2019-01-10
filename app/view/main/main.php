@@ -1,10 +1,13 @@
 
-<div class="">
+<div class="p-1">
 <div class="table-responsive text-nowrap">
-  <form action="" class="home-form"  method="get">
-<input type="text" class="search" name="search" placeholder="Поиск по имени">
-        <button type="submit" class="btn btn-primary">Search</button>
-  </form>
+
+
+
+    <form action="" class=" d-flex justify-content-end"  method="get">
+  <input type="text" class="search" name="search" placeholder="Поиск по имени">
+          <button type="submit" class="btn btn-primary">Search</button>
+    </form>
 
 <table class = "table">
   <thead>
