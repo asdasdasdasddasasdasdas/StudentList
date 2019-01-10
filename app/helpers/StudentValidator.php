@@ -70,6 +70,7 @@ private function ValidateEmail( $email)
   elseif($this->db->CheckEmail($email)){
     return "Такой E-mail уже сущестует";
   }
+
 }
 private function ValidateGroup($group)
 {

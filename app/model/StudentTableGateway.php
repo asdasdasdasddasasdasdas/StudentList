@@ -21,6 +21,7 @@ if(!empty($params)){
     }
 }
 
+
 $stmt->execute();
 
 
@@ -86,12 +87,7 @@ $this->query("UPDATE students SET name=:name,surname=:surname, balli=:balli, gro
    ]);
 }
 public function CheckEmail(string $email){
-$result = $this->query("SELECT * FROM student WHERE email=$email");
-if($result!==null){
-  return true;
-}
-else{
-  return false;
-}
+$result = $this->query("SELECT email FROM students WHERE email=:email",['email'=>$email]);
+return $result->fetch(PDO::FETCH_ASSOC);
 }
 }
