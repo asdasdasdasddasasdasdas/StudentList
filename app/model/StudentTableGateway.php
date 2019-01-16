@@ -14,7 +14,9 @@ class StudentTableGateway
        $this->db = new PDO('mysql:host='.$config['host'].
            ';dbname='.$config['name'].';',
            $config['user'],
-           $config['password']);
+           $config['password'],
+           [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+
 
    }
 
@@ -96,19 +98,22 @@ class StudentTableGateway
    public function addStudent(Student $student) :void
    {
 
-       $result=$this->query('INSERT INTO students (name, surname, balli, groupa, gender, email, hash) VALUES (:name, :surname, :balli, :groupa, :gender, :email, :hash)', ['name'=>$student->name,
-              'surname'=>$student->surname,
-              'balli'=>$student->balli,
-              'groupa'=>$student->groupa,
-              'gender'=>$student->gender,
-              'email'=>$student->email,
-              'hash'=>$student->hash
-              ]);
+       $result=$this->query('INSERT INTO students (name, surname, balli, groupa, gender, email, hash)
+           VALUES (:name, :surname, :balli, :groupa, :gender, :email, :hash)',
+               ['name'=>$student->name,
+               'surname'=>$student->surname,
+               'balli'=>$student->balli,
+               'groupa'=>$student->groupa,
+               'gender'=>$student->gender,
+               'email'=>$student->email,
+               'hash'=>$student->hash
+               ]);
 
    }
    public function updateStudent(Student $student) : void
    {
-       $this->query("UPDATE students SET name=:name,
+       $this->query("UPDATE students
+           SET name=:name,
            surname=:surname,
            balli=:balli,
            groupa=:group,

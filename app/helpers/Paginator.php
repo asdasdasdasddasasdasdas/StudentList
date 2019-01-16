@@ -42,7 +42,7 @@ class Paginator
 
    public function setcurrentPage($page)
    {
-       if($page>0){
+       if($page > 0 && $page <= $this->allPage){
            $this->currentPage=$page;
        } else {
            $this->currentPage=1;
