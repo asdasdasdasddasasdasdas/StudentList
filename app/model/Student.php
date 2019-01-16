@@ -1,35 +1,40 @@
 <?php
 namespace app\model;
 
-class Student {
-  public $name;
-  public $surname;
-  public $group;
-  public $male;
-  public $female;
-  public $hash;
-  public $balli;
-  public $email;
-  public function __construct($post=[]){
-$this->name = $post['name'];
-$this->surname = $post['surname'];
-$this->balli = $post['balli'];
-$this->group = $post['group'];
-$this->email = $post['email'];
-if($post['gender']=='male'){
-  $this->male=1;
-  $this->female=0;
-}
-elseif($post['gender']=='female'){
-  $this->female=1;
-  $this->male=0;
-}
-  }
-  public function generateHash(){
-   $this->hash = bin2hex(random_bytes(32));
-}
+class Student
+{
+   public $id;
+   public $hash;
+   public $name;
+   public $surname;
+   public $groupa;
+   public $gender;
+   public $balli;
+   public $email;
 
-public function setHash($hash){
-  $this->hash = $hash;
-}
+   const GENDER_FEMALE = 'f';
+   const GENDER_MALE = 'm';
+
+
+   public function fill($post) :void
+   {
+       $this->name = $post['name'];
+       $this->surname = $post['surname'];
+       $this->balli = $post['balli'];
+       $this->groupa = $post['groupa'];
+       $this->email = $post['email'];
+       $this->gender = $post['gender'];
+    }
+
+
+   public function generateHash() : void
+   {
+       $this->hash = bin2hex(random_bytes(32));
+   }
+
+
+   public function setHash($hash) : void
+   {
+       $this->hash = $hash;
+   }
 }

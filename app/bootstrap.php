@@ -1,14 +1,19 @@
 <?php
-use app\helpers\{DIContainer,StudentValidator,Authorization,Paginator};
-use app\model\StudentTableGateway;
-use app\controller\ControllerFactory;
-use app\core\View;
+use app\helpers\DIContainer;
+
 $di = new DIContainer;
 
-$di->bind('StudentTableGateway', new StudentTableGateway);
+$di->bind('dbconfig',[
+   'host'=>'localhost',
+   'name'=>'users',
+   'user'=>'root',
+   'password'=>''
+   ]);
 
-$di->bind('StudentValidator', new StudentValidator($di->get("StudentTableGateway")));
+$di->bind(StudentTableGateway::class, new app\model\StudentTableGateway($di->get('dbconfig')));
 
-$di->bind('Paginator', new Paginator);
+$di->bind(StudentValidator::class, new app\helpers\StudentValidator($di->get(StudentTableGateway::class)));
 
-$di->bind('Authorization', new Authorization);
+$di->bind(Paginator::class, new app\helpers\Paginator);
+
+$di->bind(Authorization::class, new app\helpers\Authorization);

@@ -29,10 +29,18 @@ table{
 box-shadow:2px 2px 2px rgba(0, 0, 0, 0.2);
 
 }
-span{
-  margin-top: 40px;
+span.text-danger{
+  width: auto;
   font-size:14px;
   float: left;
+  display: flex;
+  align-self: center;
+}
+.col-lg-6:last-child{
+
+  align-content: center;
+  display:flex;
+
 }
 .search{
 margin-top: 6px;

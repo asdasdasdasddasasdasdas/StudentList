@@ -1,93 +1,141 @@
 <?php
 namespace app\model;
+
+use app\model\Student;
 use PDO;
-class StudentTableGateway {
-protected $db;
 
-  function __construct(){
-$config = require 'app/config/db.php';
-$this->db = new PDO('mysql:host='.$config['host'].';dbname='.$config['name'].';',$config['user'],$config['password']);
-}
-private function query($sql,$params=[]){
+class StudentTableGateway
+{
+   protected $db;
 
-$stmt=$this->db->prepare($sql);
+   function __construct($config)
+   {
 
-if(!empty($params)){
+       $this->db = new PDO('mysql:host='.$config['host'].
+           ';dbname='.$config['name'].';',
+           $config['user'],
+           $config['password']);
 
-    foreach ($params as $key => $value) {
+   }
 
-    $stmt->bindValue(':'.$key,$value);
-
-    }
-}
+   private function query($sql,$params=[])
+   {
 
 
-$stmt->execute();
+       $stmt=$this->db->prepare($sql);
+       if(!empty($params)) {
+
+           foreach ($params as $key => $value) {
+
+               $stmt->bindValue(':'.$key,$value);
+
+           }
+       }
+       $stmt->execute();
+
+       return $stmt;
+   }
 
 
-return $stmt;
-}
-public function countStudentsBySearch($keyword){
-  $result=$this->query("SELECT COUNT(*) FROM students WHERE name LIKE :keyword",['keyword'=>$keyword]);
+   public function countStudentsBySearch($keyword) : int
+   {
+       $keyword = "%$keyword%";
+       $result=$this->query("SELECT COUNT(*) FROM students
+           WHERE name
+           LIKE :keyword",
+           ['keyword'=>$keyword]);
 
-  return $result->fetchColumn();
+       return $result->fetchColumn();
 
-}
-public function SearchStudents($offset,$limit,$keyword){
-$stmt=$this->db->prepare("SELECT * FROM students WHERE name LIKE :keyword LIMIT :limit OFFSET :offset");
-  $stmt->bindValue(':limit',$limit,PDO::PARAM_INT);
-  $stmt->bindValue(':offset',$offset,PDO::PARAM_INT);
-  $stmt->bindValue(':keyword',$keyword);
-  $stmt->execute();
-  return $stmt->fetchAll();
-}
-public function GetStudents($offset,$limit){
-$stmt=$this->db->prepare("SELECT * FROM students LIMIT :limit OFFSET :offset");
-  $stmt->bindValue(':limit',$limit,PDO::PARAM_INT);
-  $stmt->bindValue(':offset',$offset,PDO::PARAM_INT);
-  $stmt->execute();
-  return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-public function countAllStudent(){
-$result = $this->query("SELECT COUNT(*) FROM students");
-return $result->fetchColumn();
-}
-public function getStudentByHash(string $hash){
+   }
+   public function SearchStudents($offset,$limit,$keyword) : array
+   {
+       $keyword = "%$keyword%";
+       $stmt=$this->db->prepare("SELECT * FROM students
+           WHERE name
+           LIKE :keyword
+           LIMIT :limit
+           OFFSET :offset");
 
-$result = $this->query("SELECT * FROM students WHERE hash=:hash",['hash'=>$hash]);
+       $stmt->bindValue(':limit',$limit,PDO::PARAM_INT);
+       $stmt->bindValue(':offset',$offset,PDO::PARAM_INT);
+       $stmt->bindValue(':keyword',$keyword);
+       $stmt->execute();
+       return $stmt->fetchAll(PDO::FETCH_CLASS);
+   }
 
-  return $result->fetch();
 
-}
-public function addStudent(Student $student){
-$result=$this->query('INSERT INTO students
-     (name, surname, balli, groupa, male,female,email,hash )
-     VALUES
-     (:name, :surname, :balli, :group, :male,:female,:email,:hash)',
-     ['name'=>$student->name,
-     'surname'=>$student->surname,
-     'balli'=>$student->balli,
-     'group'=>$student->group,
-     'male'=>$student->male,
-     'female'=>$student->female,
-     'email'=>$student->email,
-     'hash'=>$student->hash
-     ]);
-}
-public function updateStudent( $student){
-$this->query("UPDATE students SET name=:name,surname=:surname, balli=:balli, groupa=:group, male=:male, female =:female, email=:email WHERE hash=:hash",
-   ['name'=>$student->name,
-   'surname'=>$student->surname,
-   'balli'=>$student->balli,
-   'group'=>$student->group,
-   'male'=>$student->male,
-   'female'=>$student->female,
-   'email'=>$student->email,
-   'hash'=>$student->hash
-   ]);
-}
-public function CheckEmail(string $email){
-$result = $this->query("SELECT email FROM students WHERE email=:email",['email'=>$email]);
-return $result->fetch(PDO::FETCH_ASSOC);
-}
+   public function GetStudents(int $offset,int $limit) : array
+   {
+       $stmt=$this->db->prepare("SELECT *
+           FROM students
+           LIMIT :limit
+           OFFSET :offset");
+       $stmt->bindValue(':limit',$limit,PDO::PARAM_INT);
+       $stmt->bindValue(':offset',$offset,PDO::PARAM_INT);
+       $stmt->execute();
+       return $stmt->fetchAll(PDO::FETCH_CLASS);
+   }
+
+
+   public function countAllStudent() : int
+   {
+       $result = $this->query("SELECT COUNT(*) FROM students");
+       return $result->fetchColumn();
+   }
+
+
+   public function getStudentByHash(string $hash) :Student
+   {
+       $result = $this->query("SELECT * FROM students WHERE hash=:hash",
+           ['hash'=>$hash]);
+       return $result->fetchObject('app\model\Student');
+   }
+
+
+   public function addStudent(Student $student) :void
+   {
+
+       $result=$this->query('INSERT INTO students (name, surname, balli, groupa, gender, email, hash) VALUES (:name, :surname, :balli, :groupa, :gender, :email, :hash)', ['name'=>$student->name,
+              'surname'=>$student->surname,
+              'balli'=>$student->balli,
+              'groupa'=>$student->groupa,
+              'gender'=>$student->gender,
+              'email'=>$student->email,
+              'hash'=>$student->hash
+              ]);
+
+   }
+   public function updateStudent(Student $student) : void
+   {
+       $this->query("UPDATE students SET name=:name,
+           surname=:surname,
+           balli=:balli,
+           groupa=:group,
+           gender=:gender,
+           email=:email
+           WHERE hash=:hash",
+           ['name'=>$student->name,
+           'surname'=>$student->surname,
+           'balli'=>$student->balli,
+           'group'=>$student->groupa,
+           'gender'=>$student->gender,
+           'email'=>$student->email,
+           'hash'=>$student->hash
+           ]);
+   }
+   public function CheckEmail(string $email,$id=null) : bool
+   {
+
+       $result = $this->query("SELECT email, id FROM students WHERE email=:email",['email'=>$email]);
+       $result=$result->fetch(PDO::FETCH_ASSOC);
+       if($result == null) {
+           return false;
+       } elseif($result['email'] == $email && $result['id']==$id) {
+
+           return false;
+       } else {
+           return true;
+       }
+   }
 }
