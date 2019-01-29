@@ -1,5 +1,11 @@
 # StudentList
-PHP 7.2<br>
-MySQL 5.7
-<hr>
-Нужно создать таблицу на основе дампа в students.sql.
+<h3>Требования</h4>
+<ol>
+  <li>PHP-7.2-x64</li>
+  <li>MySQL-5.7-x64</li>
+  <li>Composer</li>
+ </ol>
+<h3>Использованные технологии</h4>
+<ol>
+  <li>MD Bootstrap</li>
+</ol>

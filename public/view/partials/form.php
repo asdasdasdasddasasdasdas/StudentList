@@ -3,7 +3,7 @@
 <div class="row row mt-5">
   <div class="col-lg-6 ">
     <label class = "label" for="">Name:</label>
-<input  class="form-control " type="text" name="name"  value="<?=htmlspecialchars($student->name)?>">
+<input  class="form-control " type="text" name="name"  value=<?=htmlspecialchars($student->name)?> required>
   </div>
   <div class="col-lg-6">
  <span class ="text-danger"><?= $errors['name_error']; ?></span>
@@ -12,7 +12,7 @@
 <div class="row mt-5">
   <div class="col-lg-6">
   <label class = "label" for="">Surname:</label>
-    <input  class="form-control " type="text" name="surname" value=<?=htmlspecialchars($student->surname)?>>
+    <input  class="form-control " type="text" name="surname" value=<?=htmlspecialchars($student->surname)?> required>
   </div>
   <div class="col-lg-6">
 <span class ="text-danger"><?= $errors['surname_error'] ?></span><br>
@@ -21,7 +21,7 @@
 <div class="row  mt-5">
   <div class="col-lg-6">
       <label class = "label" for="">Group:</label>
-<input  class="form-control " type="text" name="groupa" value=<?=htmlspecialchars($student->groupa)?>>
+<input  class="form-control " type="text" name="groupa" value=<?=htmlspecialchars($student->groupa)?> required>
   </div>
   <div class="col-lg-6">
 <span class ="text-danger"><?= $errors['group_error'] ?></span><br>
@@ -30,7 +30,7 @@
 <div class="row  mt-5">
   <div class="col-lg-6">
       <label class = "label" for="">Ege:</label>
-<input   class="form-control "  type="number" name="balli" value=<?=htmlspecialchars($student->balli) ?>>
+<input   class="form-control "  type="number" name="balli" value=<?=htmlspecialchars($student->balli) ?> required>
   </div>
   <div class="col-lg-6">
 <span class ="text-danger"><?= $errors['balli_error'] ?></span><br>
@@ -39,7 +39,7 @@
 <div class="row mt-5">
   <div class="col-lg-6">
       <label class = "label" for="">Email:</label>
-<input  class="form-control " type="email" name="email" value=<?=htmlspecialchars($student->email) ?>>
+<input  class="form-control " type="email" name="email" value=<?=htmlspecialchars($student->email) ?> required>
   </div>
   <div class="col-lg-6">
 <span class ="text-danger"><?= $errors['email_error'] ?></span><br>
