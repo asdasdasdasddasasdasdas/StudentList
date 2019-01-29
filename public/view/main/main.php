@@ -2,12 +2,20 @@
 <div class="p-1">
 <div class="table-responsive text-nowrap">
 
+<header class ="d-flex justify-content-center">
+  <form action="" class="d-flex"  method="get">
+<input type="text" class="search" name="search" placeholder='Поиск по имени' value=<?= htmlspecialchars($search, ENT_QUOTES); ?>>
+        <button type="submit" class="btn btn-primary">Search</button>
+  </form>
+  <?php  if(!$this->auth->checkHash()) : ?>
 
+    <a class="btn-main btn btn-primary align-self-center" href="/registartion">Зарегистрироваться</a>
 
-    <form action="" class=" d-flex justify-content-end"  method="get">
-  <input type="text" class="search" name="search" placeholder='Поиск по имени' value=<?= htmlspecialchars($search, ENT_QUOTES); ?>>
-          <button type="submit" class="btn btn-primary">Search</button>
-    </form>
+<?php endif; ?>
+<?php  if($this->auth->checkHash()) : ?>
+  <a class="btn-main btn btn-primary align-self-center" href="/profile">В профиль</a>
+<?php endif; ?>
+</header>
 
 <table class = "table">
   <thead>

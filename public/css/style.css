@@ -3,9 +3,9 @@ html,body{
   overflow-y: hidden;
   overflow-x: hidden;
 }
-th{
-background: rgb(25, 112, 255);
-
+thead th{
+background-color: rgb(25, 112, 255);
+color:white;
 }
 td{
 
@@ -48,8 +48,19 @@ margin-right: 10px;
   height: 45px
 }
 
-.table-responsive{margin-top:200px;}
+.table-responsive{
+
+  margin-top:200px;
+
+}
 .label{
   margin-left: 5px;
   float:left;
+}
+
+.btn-main{
+  text-align: center;
+  line-height: 40px;
+  height: 50px;
+  padding: 5px 10px;
 }

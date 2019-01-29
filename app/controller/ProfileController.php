@@ -9,37 +9,38 @@ class ProfileController extends Controller
    private $model;
    private $auth;
    private $validator;
+
    public function __construct($model,$validator,$auth)
    {
-   $this->model=$model;
-   $this->auth=$auth;
-   $this->validator=$validator;
+       $this->model=$model;
+       $this->auth=$auth;
+       $this->validator=$validator;
    }
 
    public function mainAction()
    {
          if($this->auth->checkHash())
          {
-              $student = $this->model->getStudentByHash($_COOKIE['hash']);
-             if(!empty($_POST)){
+           $student = $this->model->getStudentByHash($_COOKIE['hash']);
+           if(!empty($_POST)){
 
 
-           $student->fill($this->grabPostValues());
-           $student->setHash($_COOKIE['hash']);
-           $errors = $this->validator->ValidateAll($student);
-           if(empty($errors)){
-               $this->model->updateStudent($student);
-               header("Location:/profile");die();
+               $student->fill($this->grabPostValues());
+               $student->setHash($_COOKIE['hash']);
+               $errors = $this->validator->ValidateAll($student);
+               if(empty($errors)){
+                   $this->model->updateStudent($student);
+                   header("Location:/profile");die();
+               }
            }
-         }
 
            $this->render('../public/view/profile/profile.php',[
            'student'=>$student,
            'errors'=>$errors
                  ]);
-         } else{
+           } else {
              header("Location:/registration");die();
-         }
+           }
 
      }
 

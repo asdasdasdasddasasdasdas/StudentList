@@ -56,5 +56,8 @@
 <span id='asd' class ="text-danger align-middle"><?= $errors['gender_error']; ?></span><br>
   </div>
 </div>
-<button type="submit" class="btn btn-primary btn-rounded"  name="submit">Submit</button>
+<button type="submit" class="btn btn-primary btn-rounded"  name="submit">Подтвердить</button>
 </form>
+<a class="btn btn-block btn-primary" href="/">Вернутся на главную страницу</a>
+
+</div>

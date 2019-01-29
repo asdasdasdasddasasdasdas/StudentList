@@ -6,48 +6,44 @@ use app\controller\Controller;
 
 class RegistrationController extends Controller
 {
-    protected $model;
-    protected $validator;
-    private $auth;
-    public function __construct($model, $auth, $validator)
-    {
-        $this->model=$model;
-        $this->validator=$validator;
-        $this->auth = $auth;
-    }
+   protected $model;
+   protected $validator;
+   private $auth;
+   public function __construct($model, $auth, $validator)
+   {
+       $this->model=$model;
+       $this->validator=$validator;
+       $this->auth = $auth;
+   }
 
-    public function mainAction()
-    {
-        if(!$this->auth->checkHash()){
+   public function mainAction()
+   {
+       if(!$this->auth->checkHash())
+       {
 
-          if(!empty($_POST))
-          {
+           if(!empty($_POST))
+           {
 
-              $student = new Student;
-              $student->fill($this->grabPostValues());
-              $errors = $this->validator->ValidateAll($student);
-              if(empty($errors)){
+               $student = new Student;
+               $student->fill($this->grabPostValues());
+               $errors = $this->validator->ValidateAll($student);
+               if(empty($errors)){
                    $student->generateHash();
-                  $this->model->addStudent($student);
-                  $this->auth->makeAuth($student->hash);
-                  header("Location:/profile");die();
-
-                 }
-             }
-          $this->render('../public/view/registration/registration.php',[
-          'errors'=>$errors,'student'=>$student
-          ]);
-        } else {
+                   $this->model->addStudent($student);
+                   $this->auth->makeAuth($student->hash);
+                   header("Location:/profile");die();
+               }
+           $this->render('../public/view/registration/registration.php',[
+           'errors'=>$errors,'student'=>$student
+           ]);
+           } else {
                header("Location:/profile");die();
            }
+       }
+  }
 
 
-
-    }
-
-
-
-   private function grabPostValues()
+   public function grabPostValues()
    {
        $values = [];
        $values["name"] = array_key_exists("name", $_POST) ?

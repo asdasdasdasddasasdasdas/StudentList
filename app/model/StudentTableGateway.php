@@ -28,9 +28,7 @@ class StudentTableGateway
        if(!empty($params)) {
 
            foreach ($params as $key => $value) {
-
                $stmt->bindValue(':'.$key,$value);
-
            }
        }
        $stmt->execute();
@@ -136,8 +134,7 @@ class StudentTableGateway
        $result=$result->fetch(PDO::FETCH_ASSOC);
        if($result == null) {
            return false;
-       } elseif($result['email'] == $email && $result['id']==$id) {
-
+       } elseif($result['email'] == $email && $result['id'] == $id) {
            return false;
        } else {
            return true;
