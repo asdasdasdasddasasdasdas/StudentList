@@ -32,13 +32,11 @@ class RegistrationController extends Controller
                    $this->model->addStudent($student);
                    $this->auth->makeAuth($student->hash);
                    header("Location:/profile");die();
-               }
+           }
            $this->render('../public/view/registration/registration.php',[
            'errors'=>$errors,'student'=>$student
            ]);
-           } else {
-               header("Location:/profile");die();
-           }
+           
        }
   }
 
