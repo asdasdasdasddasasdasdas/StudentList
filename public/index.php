@@ -1,19 +1,20 @@
 <?php
+declare(strict_types=1);
+
 use app\core\Router;
 
 
-session_start() ;
+session_start();
 
 
-spl_autoload_register(function($class)
-{
-   $path = str_replace('\\','/',dirname(__FILE__)."/".$class.'.php');
+spl_autoload_register(function ($class) {
+    $path = str_replace('\\', '/', dirname(__FILE__) . "/" . $class . '.php');
 
-   $path = str_replace('/public','', $path);
+    $path = str_replace('/public', '', $path);
 
-   if(file_exists($path)){
-       require $path;
-   }
+    if (file_exists($path)) {
+        require $path;
+    }
 });
 
 require '../app/bootstrap.php';

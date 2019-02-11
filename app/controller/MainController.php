@@ -1,43 +1,39 @@
 <?php
+
 namespace app\controller;
 
 use app\controller\Controller;
 
 class MainController extends Controller
 {
-   private $model;
-   protected $auth;
-   protected $paginator;
+    private $studentTG;
+    protected $auth;
 
-   public function __construct(
-       \app\model\StudentTableGateway $model,
-       \app\helpers\Authorization $auth,
-       \app\helpers\Paginator $paginator
-   )
-   {
-       $this->model = $model;
-       $this->auth = $auth;
-       $this->paginator = $paginator;
+    public function __construct(
+        \app\model\StudentTableGateway $studentTG,
+        \app\helpers\Authorization $auth
 
-   }
+    ) {
+        $this->studentTG = $studentTG;
+        $this->auth = $auth;
 
 
-   public function mainAction()
-   {
-       $search=$_GET['search'];
+    }
 
-       $limit = 5;
 
-       $countStudents =$_GET['search']!==''? $this->model->countStudentsBySearch($search):$this->model->countAllStudent();
+    public function mainAction()
+    {
+        $limit = 5;
 
-       $this->paginator->countPage($countStudents);
+        $search = trim(strval($_GET['search']));
+        $countStudents = $_GET['search'] !== '' ? $this->studentTG->countStudentsBySearch($search) : $this->studentTG->countAllStudent();
+        $this->paginator = new \app\helpers\Paginator(intval($_GET['page']), $search, $countStudents);
 
-       $this->paginator->setCurrentPage($_GET['page']);
+        $offset = $limit * ($this->paginator->getCurrentPage() - 1);
 
-       $offset = $limit*($this->paginator->getCurrentPage()-1);
+        $students = $_GET['search'] !== '' ? $this->studentTG->SearchStudents($offset, $limit,
+            $search) : $this->studentTG->getStudents($offset, $limit);
 
-       $students =$_GET['search']!==''?$this->model->SearchStudents($offset,$limit,$search):$this->model->GetStudents($offset,$limit);
-
-       $this->render('../public/view/main/main.php',['students'=>$students, 'search'=>$search]);
-   }
+        $this->render('../app/view/main/main.php', ['students' => $students, 'search' => $search]);
+    }
 }

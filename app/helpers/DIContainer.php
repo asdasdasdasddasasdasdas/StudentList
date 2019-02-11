@@ -1,4 +1,5 @@
 <?php
+
 namespace app\helpers;
 
 class DIContainer
@@ -6,18 +7,20 @@ class DIContainer
     /**
      * @var array
      */
-    public $dependencies = [];
+    private $dependencies = [];
+
     /**
      * Binds dependency using $dependencies array
      *
      * @param string $key
      * @param $value
      */
-    public function bind(string $name,$value) :void
+    public function bind(string $name, $value): void
     {
 
         $this->dependencies[$name] = $value;
     }
+
     /**
      * Returns dependency from $dependencies array
      * Throws an exception if dependency is not found
@@ -26,14 +29,19 @@ class DIContainer
      *
      * @return mixed
      *
-     * @throws \Exception
+     * @throws \DIContainerException
      */
     public function get(string $name)
     {
-        if (!array_key_exists($name, $this->dependencies))
-        {
-            throw new \Exception("No {$name} found in the container");
+        try {
+            if (!array_key_exists($name, $this->dependencies)) {
+                throw new \app\exceptions\DIContainerException;
+            }
+        } catch (\app\exceptions\DIContainerException $e) {
+            $e->getMessage2($name);
         }
+
+
         return $this->dependencies[$name];
     }
 }

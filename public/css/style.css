@@ -1,66 +1,85 @@
-html,body{
-  height:1000px;
-  overflow-y: hidden;
-  overflow-x: hidden;
+html, body {
+    overflow-x: hidden;
 }
-thead th{
-background-color: rgb(25, 112, 255);
-color:white;
-}
-td{
 
-  border-bottom:1px solid rgb(232, 232, 232);
+.main-table thead th {
+    background-color: rgb(25, 112, 255);
+    color: white;
+}
+
+.main-table td {
+
+    border-bottom: 1px solid rgb(232, 232, 232);
 
 }
-td,tr,thead,th,table{
+
+.main-table td, .main-table tr, .main-table thead, .main-table th, .main-table table {
     box-sizing: border-box;
 }
-td:last-child{
-  border-right: 0px solid rgb(232, 232, 232);
-}
-form{
-width: 600px;
-  padding:20px 20px;
-}
-.container-fluid{
-  text-align: center;
-}
-table{
-box-shadow:2px 2px 2px rgba(0, 0, 0, 0.2);
 
-}
-span.text-danger{
-  width: auto;
-  font-size:14px;
-  float: left;
-  display: flex;
-  align-self: center;
-}
-.col-lg-6:last-child{
-
-  align-content: center;
-  display:flex;
-
-}
-.search{
-margin-top: 6px;
-margin-right: 10px;
-  height: 45px
+td:last-child {
+    border-right: 0px solid rgb(232, 232, 232);
 }
 
-.table-responsive{
-
-  margin-top:200px;
-
-}
-.label{
-  margin-left: 5px;
-  float:left;
+.profile-form {
+    width: 600px;
+    padding: 20px 20px;
 }
 
-.btn-main{
-  text-align: center;
-  line-height: 40px;
-  height: 50px;
-  padding: 5px 10px;
+.container-fluid {
+    text-align: center;
+}
+
+.main-table table {
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+
+}
+
+.error-h1 {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.error-label {
+    margin-top: 300px;
+}
+
+.profile-form span.text-danger {
+    width: auto;
+    font-size: 14px;
+    float: left;
+    display: flex;
+    align-self: center;
+}
+
+.col-lg-6:last-child {
+
+    align-content: center;
+    display: flex;
+
+}
+
+.search {
+    margin-top: 6px;
+    margin-right: 10px;
+    height: 45px
+}
+
+.table-responsive {
+
+    margin-top: 200px;
+
+}
+
+.label {
+    margin-left: 5px;
+    float: left;
+}
+
+.btn-main {
+    text-align: center;
+    line-height: 40px;
+    height: 50px;
+    padding: 5px 10px;
 }

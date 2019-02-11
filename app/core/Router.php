@@ -1,47 +1,40 @@
 <?php
+
 namespace app\core;
 
-use app\controller\ControllerFactory;
+use Closure;
+use app\exceptions\ControllerException;
 
 class Router
 {
 
-   private $di;
-   public function __construct($DI)
-   {
-       $this->di =$DI;
-   }
-   public function run()
-   {
-       $params = trim(parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH),"/");
-       $params =explode('/',$params);
+    private $di;
 
+    public function __construct($di)
+    {
+        $this->di = $di;
+    }
 
-       if($params[0]) {
-           $controller = ucfirst($params[0]).'Controller';
-           if($params[1]) {
-               $action= mb_strtolower($params[1]).'Action';
-           } else {
-               $action = 'mainAction';
-           }
-       }
-       else {
-           $controller = 'MainController';
-           $action = 'mainAction';
-       }
-   $controllerObject=ControllerFactory::CreateController($controller,$this->di);
-   try {
-       if(method_exists($controllerObject,$action)) {
-           $controllerObject->$action();
-       } else {
-           throw new \Exception('Такой страницы не сущестует');
-       }
-   } catch (\Exception $e) {
-       $e->getMessage();
-   }
-
-
-   }
-
-
+    public function run()
+    {
+        $url = trim(parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH), "/");
+        $params = explode('/', $url);
+        $action = mb_strtolower($params[0]);
+        try {
+            if (true) {
+            }
+            if ($action == 'profile') {
+                $this->di->get(\ProfileController::class)->__invoke()->$action();
+            } elseif ($action == 'registration') {
+                $this->di->get(\ProfileController::class)->__invoke()->$action();
+            } elseif ($action == '/' || $action == '') {
+                $action = 'MainAction';
+                $this->di->get(\MainController::class)->__invoke()->$action();
+            } else {
+                throw new ControllerException;
+            }
+        } catch (ControllerException $e) {
+            $e->get404($url);
+        }
+    }
 }

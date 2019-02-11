@@ -1,4 +1,5 @@
 <?php
+
 namespace app\controller;
 
 use app\model\Student;
@@ -6,70 +7,101 @@ use app\controller\Controller;
 
 class ProfileController extends Controller
 {
-   private $model;
-   private $auth;
-   private $validator;
+    private $model;
+    private $auth;
+    private $validator;
 
-   public function __construct($model,$validator,$auth)
-   {
-       $this->model=$model;
-       $this->auth=$auth;
-       $this->validator=$validator;
-   }
-
-   public function mainAction()
-   {
-         if($this->auth->checkHash())
-         {
-           $student = $this->model->getStudentByHash($_COOKIE['hash']);
-           if(!empty($_POST)){
+    public function __construct($studentTG, $validator, $auth)
+    {
+        $this->studentTG = $studentTG;
+        $this->auth = $auth;
+        $this->validator = $validator;
+    }
 
 
-               $student->fill($this->grabPostValues());
-               $student->setHash($_COOKIE['hash']);
-               $errors = $this->validator->ValidateAll($student);
-               if(empty($errors)){
-                   $this->model->updateStudent($student);
-                   header("Location:/profile");die();
-               }
-           }
+    public function registration()
+    {
 
-           $this->render('../public/view/profile/profile.php',[
-           'student'=>$student,
-           'errors'=>$errors
-                 ]);
-           } else {
-             header("Location:/registration");die();
-           }
+        if (!$this->auth->IsLoggedIn()) {
+            if (!empty($_POST)) {
 
-     }
+                $student = new Student;
+                $student->fill($this->grabPostValues());
+                $errors = $this->validator->ValidateAll($student);
+                if (empty($errors)) {
+                    $student->generateHash();
+                    $this->studentTG->addStudent($student);
+                    $this->auth->makeAuth($student->hash);
+                    header("Location:/profile");
+                    die();
+                }
+            }
+            var_dump(dirname(__FILE__));
+            die();
+            $this->render('../app/view/registration/registration.php', [
+                'errors' => $errors,
+                'student' => $student
+            ]);
+        } else {
+            header('Location:/');
+            die();
+        }
+    }
 
 
+    public function profile()
+    {
+        if ($this->auth->IsLoggedIn()) {
 
-   private function grabPostValues()
-   {
-       $values = [];
-       $values["name"] = array_key_exists("name", $_POST) ?
-           trim(strval($_POST["name"])) :
-           "";
-       $values["surname"] = array_key_exists("surname", $_POST) ?
-           trim(strval($_POST["surname"])) :
-           "";
-       $values["gender"] = array_key_exists("gender", $_POST) ?
-           strval($_POST["gender"]) :
-           "";
-       $values["groupa"] = array_key_exists("groupa", $_POST) ?
-           trim(strval($_POST["groupa"])) :
-           "";
-       $values["balli"] = array_key_exists("balli", $_POST) ?
-           intval($_POST["balli"]) :
-           0;
-       $values["email"] = array_key_exists("email", $_POST) ?
-           trim(strval($_POST["email"])) :
-           "";
+            $student = $this->studentTG->getStudentByHash($this->auth->getHash());
+            if (!empty($_POST)) {
 
-       return $values;
-  }
+                $student->fill($this->grabPostValues());
+                $student->setHash($_COOKIE['hash']);
+                $errors = $this->validator->ValidateAll($student);
+                if (empty($errors)) {
+                    $this->studentTG->updateStudent($student);
+                    header("Location:/profile");
+                    die();
+                }
+            }
+
+            $this->render('../app/view/profile/profile.php', [
+                'student' => $student,
+                'errors' => $errors
+            ]);
+        } else {
+            header("Location:/registration");
+            die();
+        }
+
+    }
+
+
+    private function grabPostValues(): array
+    {
+        $values = [];
+        $values["name"] = array_key_exists("name", $_POST) ?
+            trim(strval($_POST["name"])) :
+            "";
+        $values["surname"] = array_key_exists("surname", $_POST) ?
+            trim(strval($_POST["surname"])) :
+            "";
+        $values["gender"] = array_key_exists("gender", $_POST) ?
+            strval($_POST["gender"]) :
+            "";
+        $values["group_name"] = array_key_exists("group_name", $_POST) ?
+            trim(strval($_POST["group_name"])) :
+            "";
+        $values["balli"] = array_key_exists("balli", $_POST) ?
+            intval($_POST["balli"]) :
+            0;
+        $values["email"] = array_key_exists("email", $_POST) ?
+            trim(strval($_POST["email"])) :
+            "";
+
+        return $values;
+    }
 
 
 }
