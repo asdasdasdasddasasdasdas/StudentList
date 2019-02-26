@@ -16,7 +16,7 @@ class StudentValidator
     }
 
 
-    public function ValidateAll($student): array
+    public function validateAll($student): array // Проверяет все входящие данные из формы.
     {
         $errors = [];
         $errors['name_error'] = $this->ValidateName($student->name);
@@ -31,7 +31,7 @@ class StudentValidator
     }
 
 
-    public function ValidateName($name)
+    public function validateName($name)
     {
         $length = mb_strlen($name);
         if ($length > 40) {
@@ -41,7 +41,7 @@ class StudentValidator
         }
     }
 
-    private function ValidateSurname($surname)
+    private function validateSurname($surname)
     {
         $length = mb_strlen($surname);
         if ($length > 40) {
@@ -52,7 +52,7 @@ class StudentValidator
     }
 
 
-    private function ValidateBalli($balli)
+    private function validateBalli($balli)
     {
         if ($balli > 300 || $balli < 50) {
             return "Количество баллов должно находится в пределе от 50 до 300, а вы ввели $balli";
@@ -63,7 +63,7 @@ class StudentValidator
     }
 
 
-    private function ValidateEmail($email, $id)
+    private function validateEmail($email, $id)
     {
         $length = mb_strlen($email);
         if ($length == 0) {
@@ -77,7 +77,7 @@ class StudentValidator
     }
 
 
-    private function ValidateGroup($group)
+    private function validateGroup($group)
     {
 
         $length = mb_strlen($group);
@@ -92,7 +92,7 @@ class StudentValidator
     }
 
 
-    private function ValidateGender($gender)
+    private function validateGender($gender)
     {
 
         if ($gender !== Student::GENDER_FEMALE && $gender !== Student::GENDER_MALE) {

@@ -1,7 +1,8 @@
 <?php
 return [
-    'host' => 'localhost',
-    'name' => 'users',
-    'user' => 'root',
+    'host' => '', // настройки базы данных
+    'name' => '',
+    'user' => '',
     'password' => '',
+    'charset' => 'utf8mb4'
 ];

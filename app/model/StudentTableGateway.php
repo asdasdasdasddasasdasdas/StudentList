@@ -13,7 +13,7 @@ class StudentTableGateway
     {
 
         $this->db = new PDO('mysql:host=' . $config['host'] .
-            ';dbname=' . $config['name'] . ';',
+            ';dbname=' . $config['name'] . ';charset=' . $config['charset'] . ';',
             $config['user'],
             $config['password'],
             [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);

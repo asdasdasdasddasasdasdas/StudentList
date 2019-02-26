@@ -9,7 +9,7 @@
             </form>
             <?php if (!$this->auth->IsLoggedIn()) : ?>
 
-                <a class="ml-5 btn-main btn btn-primary align-self-center" href="/registartion">Зарегистрироваться</a>
+                <a class="ml-5 btn-main btn btn-primary align-self-center" href="/registration">Зарегистрироваться</a>
 
             <?php endif; ?>
             <?php if ($this->auth->IsLoggedIn()) : ?>

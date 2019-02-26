@@ -34,14 +34,14 @@ class Paginator
     public function getPreviousPageUrl()
     {
         $previousPage = $this->currentPage > 1 ? $this->currentPage - 1 : null;
-        return "/?page=" . $previousPage . '&search=' . $this->search;
+        return "/?page=" . urlencode($previousPage) . '&search=' . urlencode($this->search);
     }
 
 
     public function getNextPageUrl()
     {
         $nextPage = $this->allPage > 1 && $this->currentPage != $this->allPage ? $this->currentPage + 1 : null;
-        return "/?page=" . $nextPage . '&search=' . $this->search;
+        return "/?page=" . urlencode($nextPage) . '&search=' . urlencode($this->search);
     }
 
 

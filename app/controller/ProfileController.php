@@ -2,7 +2,7 @@
 
 namespace app\controller;
 
-use app\model\Student;
+use app\model\{Student, StudentTableGateway};
 use app\controller\Controller;
 
 class ProfileController extends Controller
@@ -11,7 +11,7 @@ class ProfileController extends Controller
     private $auth;
     private $validator;
 
-    public function __construct($studentTG, $validator, $auth)
+    public function __construct(StudentTableGateway $studentTG, $validator, $auth)
     {
         $this->studentTG = $studentTG;
         $this->auth = $auth;
@@ -36,8 +36,7 @@ class ProfileController extends Controller
                     die();
                 }
             }
-            var_dump(dirname(__FILE__));
-            die();
+
             $this->render('../app/view/registration/registration.php', [
                 'errors' => $errors,
                 'student' => $student
@@ -53,11 +52,11 @@ class ProfileController extends Controller
     {
         if ($this->auth->IsLoggedIn()) {
 
-            $student = $this->studentTG->getStudentByHash($this->auth->getHash());
+            $student = $this->auth->getAuthUser($this->auth->getHash());
             if (!empty($_POST)) {
 
                 $student->fill($this->grabPostValues());
-                $student->setHash($_COOKIE['hash']);
+                $student->hash = $this->auth->getHash();
                 $errors = $this->validator->ValidateAll($student);
                 if (empty($errors)) {
                     $this->studentTG->updateStudent($student);

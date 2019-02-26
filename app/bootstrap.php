@@ -4,18 +4,13 @@ use app\helpers\DIContainer;
 
 $di = new DIContainer;
 
-$di->bind('dbconfig', [
-    'host' => 'localhost',
-    'name' => 'users',
-    'user' => 'root',
-    'password' => ''
-]);
+$di->bind('dbconfig', require "config/db.php");
 
 $di->bind(StudentTableGateway::class, new app\model\StudentTableGateway($di->get('dbconfig')));
 
 $di->bind(StudentValidator::class, new app\helpers\StudentValidator($di->get(StudentTableGateway::class)));
 
-$di->bind(Authorization::class, new app\helpers\Authorization);
+$di->bind(Authorization::class, new app\helpers\Authorization($di->get(StudentTableGateway::class)));
 
 $di->bind(MainController::class, function () use ($di) {
 

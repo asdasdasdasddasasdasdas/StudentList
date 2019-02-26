@@ -32,10 +32,4 @@ class Student
     {
         $this->hash = bin2hex(random_bytes(32));
     }
-
-
-    public function setHash($hash): void
-    {
-        $this->hash = $hash;
-    }
 }
