@@ -2,7 +2,7 @@
 
 namespace app\controller;
 
-use app\model\{Student, StudentTableGateway};
+
 use app\controller\Controller;
 
 class ProfileController extends Controller
@@ -11,8 +11,11 @@ class ProfileController extends Controller
     private $auth;
     private $validator;
 
-    public function __construct(StudentTableGateway $studentTG, $validator, $auth)
-    {
+    public function __construct(
+        \app\model\StudentTableGateway $studentTG,
+        \app\helpers\StudentValidator $validator,
+        \app\helpers\Authorization $auth
+    ) {
         $this->studentTG = $studentTG;
         $this->auth = $auth;
         $this->validator = $validator;

@@ -4,9 +4,7 @@ use app\helpers\DIContainer;
 
 $di = new DIContainer;
 
-$di->bind('dbconfig', require "config/db.php");
-
-$di->bind(StudentTableGateway::class, new app\model\StudentTableGateway($di->get('dbconfig')));
+$di->bind(StudentTableGateway::class, new app\model\StudentTableGateway());
 
 $di->bind(StudentValidator::class, new app\helpers\StudentValidator($di->get(StudentTableGateway::class)));
 

@@ -2,6 +2,7 @@
 
 namespace app\model;
 
+use app\config\DBConnector;
 use app\model\Student;
 use PDO;
 
@@ -9,14 +10,15 @@ class StudentTableGateway
 {
     protected $db;
 
-    function __construct($config)
+    function __construct()
     {
+        $DBConnector = DBConnector::getInstance();
 
-        $this->db = new PDO('mysql:host=' . $config['host'] .
-            ';dbname=' . $config['name'] . ';charset=' . $config['charset'] . ';',
-            $config['user'],
-            $config['password'],
-            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+        $this->db = new PDO('mysql:host=' . $DBConnector->connection['host'] .
+            ';dbname=' . $DBConnector->connection['name'] . ';charset=' . $DBConnector->connection['charset'] . ';',
+            $DBConnector->connection['user'],
+            $DBConnector->connection['password']
+        );
 
 
     }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Янв 16 2019 г., 18:11
+-- Время создания: Мар 02 2019 г., 21:53
 -- Версия сервера: 5.7.23
 -- Версия PHP: 7.2.10
 
@@ -34,16 +34,16 @@ CREATE TABLE `students` (
   `name` varchar(20) NOT NULL,
   `surname` varchar(20) NOT NULL,
   `balli` int(3) NOT NULL,
-  `groupa` varchar(10) NOT NULL,
-  `email` varchar(20) NOT NULL,
-  `gender` varchar(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `group_name` varchar(10) NOT NULL,
+  `email` varchar(40) NOT NULL,
+  `gender` enum('f','m') DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Дамп данных таблицы `students`
 --
 
-INSERT INTO `students` (`hash`, `id`, `name`, `surname`, `balli`, `groupa`, `email`, `gender`) VALUES
+INSERT INTO `students` (`hash`, `id`, `name`, `surname`, `balli`, `group_name`, `email`, `gender`) VALUES
 ('46f648fdda4fbbe601c64b03f229877fcaf675e272c724526b39d3a21b0d6187', 17, 'Сергей', 'Жуковский', 70, 'фф1', 'asdweasdr@mail.ru', 'm'),
 ('972032c1a0f5b458a138567a59004c388968b93e81d62dcba91dad2b6314adbc', 18, 'Дарья', 'Ефремова', 123, 'фф4', 'sdfd@mail.ru', 'f'),
 ('f5638f7c039ebc105a5a16d2131601d43b17ee59e547a52ab93b3e4e9e8dc591', 19, 'Михаил', 'Зайцев', 123, 'фф1', 'dfg@mail.ru', 'm'),
@@ -57,7 +57,13 @@ INSERT INTO `students` (`hash`, `id`, `name`, `surname`, `balli`, `groupa`, `ema
 ('b00277897c83b4eadfafe063b8e75a360f8b49b91f8af388730ed9009be106bb', 28, 'Михаил', 'Фамилия', 231, 'фф1', 'asdwsadawdas@mail.ru', 'm'),
 ('d8dd6413eb4cc0e2cbca97cb89eb43afd11a669e43439dbca1674cdd4d87653d', 29, 'Михаил', 'фамилия', 234, 'фф1', 'adawas@mail.ru', 'm'),
 ('0a1c5c9f7c34aac76e32c372dd23556644afe33eaac59b8d71c7682831fe6459', 36, 'Гриша', 'Иванов', 123, 'фф1', 'asdasd@mail.ru', 'm'),
-('affd9a13486cd51505ad88a0b00c8aa18ca9db405f59239a123745b8cf0e76ae', 37, 'asdwa', 'asd', 123, 'фф1', 'dasdawdwdad@mail.ru', 'm');
+('affd9a13486cd51505ad88a0b00c8aa18ca9db405f59239a123745b8cf0e76ae', 37, 'asdwa', 'asd', 123, 'фф1', 'dasdawdwdad@mail.ru', 'm'),
+('3a575111570f4cf3e07ab96dfbde315bdb808ac2d4604fdc67df190c9ec1b30d', 38, 'Сергей', 'выаыва', 300, 'фф2', 'asdaadsasd@mail.ru', 'm'),
+('9051cf0be5cd069a8603676250076d0be2f998f38072b3f7a1de72d39afb4d0a', 39, 'фывв', 'asdwadas', 123, 'фф2', 'asdd@mail.ru', 'm'),
+('ae3fc295609036a1d875605b55ff40b622dd929a939959838260913439cf3b06', 40, 'asdwawadsa', 'awdasd', 123, 'ф2', 'asdassdawad@mail.ru', 'f'),
+('1ccb4c7b0c8a6200ac34467842c3c61de9c5fc0f7641510e0e372b0a2e9f762a', 41, 'фывцфв', 'фывф', 123, 'фф2', 'asdsssasd@mail.ru', 'm'),
+('312c50d15d654f87ab5eca29d5d93e1f249ed7d0a08fd53610c0b105a6059131', 42, 'asdasd', 'фыв', 123, 'фф2', 'assadawdasd@mail.ru', 'm'),
+('99073da1e74dea3b115cc1d7fb54f25908fa7ba179784ebbf70282e00a95166a', 43, 'as', 'asd', 122, 'фф1', 'asdassdwad@mail.ru', 'm');
 
 --
 -- Индексы сохранённых таблиц
@@ -78,7 +84,7 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT для таблицы `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
