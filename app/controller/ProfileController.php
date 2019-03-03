@@ -2,7 +2,7 @@
 
 namespace app\controller;
 
-
+use app\model\Student;
 use app\controller\Controller;
 
 class ProfileController extends Controller
