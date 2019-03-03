@@ -7,9 +7,9 @@ session_start();
 
 
 spl_autoload_register(function ($class) {
-    $path = str_replace('\\', '/', dirname(__FILE__) . "/" . $class . '.php');
+    $path = str_replace('\\', '/', dirname(__FILE__) . "/../" . $class . '.php');
 
-    $path = str_replace('/public', '', $path);
+   
 
     if (file_exists($path)) {
         require $path;
