@@ -50,7 +50,7 @@ class StudentTableGateway
 
     }
 
-    public function searchStudents($offset, $limit, $keyword): array
+    public function SearchStudents($offset, $limit, $keyword): array
     {
         $keyword = "%$keyword%";
         $stmt = $this->db->prepare("SELECT * FROM students

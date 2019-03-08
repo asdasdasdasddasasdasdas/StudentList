@@ -5,9 +5,9 @@ namespace StudentList\config;
 final class DBConnector
 {
     public $connection = [
-        'host' => '',
-        'name' => '',
-        'user' => '',                  // Настройка базы данных.
+        'host' => 'localhost',
+        'name' => 'users',
+        'user' => 'root',                  // Настройка базы данных.
         'password' => '',
         'charset' => 'utf8mb4'
     ];

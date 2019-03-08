@@ -2,13 +2,8 @@
 
 namespace StudentList\controller;
 
-<<<<<<< HEAD
 use StudentList\model\Student;
 use StudentList\controller\Controller;
-=======
-use StudentList\model\Student;
-use StudentList\controller\Controller;
->>>>>>> 58933a70ff093df496cc5eaf0bf535562b7f7151
 
 class ProfileController extends Controller
 {
