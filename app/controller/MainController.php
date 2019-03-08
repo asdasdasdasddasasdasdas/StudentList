@@ -1,9 +1,9 @@
 <?php
 
-namespace app\controller;
+namespace StudentList\controller;
 
 
-use app\controller\Controller;
+use StudentList\controller\Controller;
 
 class MainController extends Controller
 {
@@ -11,8 +11,8 @@ class MainController extends Controller
     protected $auth;
 
     public function __construct(
-        \app\model\StudentTableGateway $studentTG,
-        \app\helpers\Authorization $auth
+        \StudentList\model\StudentTableGateway $studentTG,
+        \StudentList\helpers\Authorization $auth
 
     ) {
         $this->studentTG = $studentTG;
@@ -28,7 +28,7 @@ class MainController extends Controller
 
         $search = trim(strval($_GET['search']));
         $countStudents = $_GET['search'] !== '' ? $this->studentTG->countStudentsBySearch($search) : $this->studentTG->countAllStudent();
-        $this->paginator = new \app\helpers\Paginator(intval($_GET['page']), $search, $countStudents);
+        $this->paginator = new \StudentList\helpers\Paginator(intval($_GET['page']), $search, $countStudents);
 
         $offset = $limit * ($this->paginator->getCurrentPage() - 1);
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace app\core;
+namespace StudentList\core;
 
 use Closure;
-use app\exceptions\ControllerException;
+use StudentList\exceptions\ControllerException;
 
 class Router
 {

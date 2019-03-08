@@ -1,9 +1,9 @@
 <?php
 
-namespace app\controller;
+namespace StudentList\controller;
 
-
-use app\controller\Controller;
+use StudentList\model\Student;
+use StudentList\controller\Controller;
 
 class ProfileController extends Controller
 {
@@ -12,9 +12,9 @@ class ProfileController extends Controller
     private $validator;
 
     public function __construct(
-        \app\model\StudentTableGateway $studentTG,
-        \app\helpers\StudentValidator $validator,
-        \app\helpers\Authorization $auth
+        \StudentList\model\StudentTableGateway $studentTG,
+        \StudentList\helpers\StudentValidator $validator,
+        \StudentList\helpers\Authorization $auth
     ) {
         $this->studentTG = $studentTG;
         $this->auth = $auth;

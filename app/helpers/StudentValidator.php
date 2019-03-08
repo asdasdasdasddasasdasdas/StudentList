@@ -1,9 +1,9 @@
 <?php
 
-namespace app\helpers;
+namespace StudentList\helpers;
 
-use app\model\StudentTableGateway;
-use app\model\Student;
+use StudentList\model\StudentTableGateway;
+use StudentList\model\Student;
 
 class StudentValidator
 {

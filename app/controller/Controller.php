@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Controller;
+namespace StudentList\controller;
 
 abstract class Controller
 {

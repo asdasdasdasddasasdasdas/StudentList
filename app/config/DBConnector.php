@@ -1,6 +1,6 @@
 <?php
 
-namespace app\config;
+namespace StudentList\config;
 
 final class DBConnector
 {

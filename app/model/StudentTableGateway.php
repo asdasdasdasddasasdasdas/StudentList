@@ -1,9 +1,9 @@
 <?php
 
-namespace app\model;
+namespace StudentList\model;
 
-use app\config\DBConnector;
-use app\model\Student;
+use StudentList\config\DBConnector;
+use StudentList\model\Student;
 use PDO;
 
 class StudentTableGateway
@@ -91,7 +91,7 @@ class StudentTableGateway
     {
         $result = $this->query("SELECT * FROM students WHERE hash=:hash",
             ['hash' => $hash]);
-        return $result->fetchObject('app\model\Student');
+        return $result->fetchObject('StudentList\model\Student');
     }
 
 

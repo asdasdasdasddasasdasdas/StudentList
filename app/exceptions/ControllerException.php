@@ -1,6 +1,6 @@
 <?php
 
-namespace app\exceptions;
+namespace StudentList\exceptions;
 
 use Exception;
 

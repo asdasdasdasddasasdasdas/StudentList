@@ -1,6 +1,6 @@
 <?php
 
-namespace app\helpers;
+namespace StudentList\helpers;
 
 class DIContainer
 {
@@ -35,9 +35,9 @@ class DIContainer
     {
         try {
             if (!array_key_exists($name, $this->dependencies)) {
-                throw new \app\exceptions\DIContainerException;
+                throw new \StudentList\exceptions\DIContainerException;
             }
-        } catch (\app\exceptions\DIContainerException $e) {
+        } catch (\StudentList\exceptions\DIContainerException $e) {
             $e->getMessage2($name);
         }
 
