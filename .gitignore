@@ -1,4 +1,5 @@
 # folder
-/vendor/
+.idea/
+vendor/
 # config db
 /app/config/config.php
