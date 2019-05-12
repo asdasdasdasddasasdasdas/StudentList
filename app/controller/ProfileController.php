@@ -3,34 +3,69 @@
 namespace StudentList\controller;
 
 use StudentList\model\Student;
-use StudentList\controller\Controller;
 
-class ProfileController extends Controller
+class ProfileController extends \StudentList\core\Controller
 {
-    private $model;
-    private $auth;
+    /**
+     * @var \StudentList\helpers\Util
+     */
+    private $util;
+
+    /**
+     * @var \StudentList\model\StudentTableGateway
+     */
+    private $studentTG;
+    /**
+     * @var \StudentList\helpers\Authorization
+     */
+    protected $auth;
+    /**
+     * @var \StudentList\helpers\StudentValidator
+     */
     private $validator;
 
-    public function __construct(
-        \StudentList\model\StudentTableGateway $studentTG,
-        \StudentList\helpers\StudentValidator $validator,
-        \StudentList\helpers\Authorization $auth
-    ) {
+    /**
+     * @var \StudentList\helpers\CSRF
+     */
+    private $csrf;
+
+    /**
+     * ProfileController constructor.
+     * @param \StudentList\model\StudentTableGateway $studentTG
+     * @param \StudentList\helpers\StudentValidator $validator
+     * @param \StudentList\helpers\Authorization $auth
+     * @param \StudentList\helpers\Util $util
+     * @param \StudentList\helpers\CSRF $csrf
+     */
+    public function __construct(\StudentList\model\StudentTableGateway $studentTG,
+                                \StudentList\helpers\StudentValidator $validator,
+                                \StudentList\helpers\Authorization $auth,
+                                \StudentList\helpers\Util $util,
+                                \StudentList\helpers\CSRF $csrf)
+    {
+        $this->util = $util;
         $this->studentTG = $studentTG;
         $this->auth = $auth;
         $this->validator = $validator;
+        $this->csrf = $csrf;
     }
 
 
-    public function registration()
+    /**
+     * @throws \Exception
+     */
+    public function registration(): void
     {
 
         if (!$this->auth->IsLoggedIn()) {
+            $token = $this->csrf->makeToken();
             if (!empty($_POST)) {
 
                 $student = new Student;
-                $student->fill($this->grabPostValues());
-                $errors = $this->validator->ValidateAll($student);
+
+
+                $student->fill($this->grabStudentValues());
+                $errors = $this->validator->ValidateAll($student, $this->csrf->checkToken());
                 if (empty($errors)) {
                     $student->generateHash();
                     $this->studentTG->addStudent($student);
@@ -39,10 +74,10 @@ class ProfileController extends Controller
                     die();
                 }
             }
-
             $this->render('../app/view/registration/registration.php', [
-                'errors' => $errors,
-                'student' => $student
+                'errors' => isset($errors) ? $errors : null,
+                'student' => isset($student) ? $student : '',
+                "token" => isset($token) ? $token : ''
             ]);
         } else {
             header('Location:/');
@@ -50,18 +85,39 @@ class ProfileController extends Controller
         }
     }
 
+    /**
+     * @return array
+     */
+    private function grabStudentValues(): array
+    {
+        $values = [];
+        $values["name"] = $this->util->grabValue("name");
+        $values["surname"] = $this->util->grabValue("surname");
+        $values["gender"] = $this->util->grabValue("gender");
+        $values["group_name"] = $this->util->grabValue("group_name");
+        $values["balli"] = $this->util->grabValue("balli");
+        $values["email"] = $this->util->grabValue("email");
 
-    public function profile()
+
+        return $values;
+    }
+
+    /**
+     *
+     */
+    public function profile(): void
     {
         if ($this->auth->IsLoggedIn()) {
-
-            $student = $this->auth->getAuthUser($this->auth->getHash());
+            $token = $this->csrf->makeToken();
+            $student = $this->auth->getAuthUser();
             if (!empty($_POST)) {
 
-                $student->fill($this->grabPostValues());
+                $student->fill($this->grabStudentValues());
                 $student->hash = $this->auth->getHash();
-                $errors = $this->validator->ValidateAll($student);
+                $errors = $this->validator->validateAll($student, $this->csrf->checkToken());
+
                 if (empty($errors)) {
+
                     $this->studentTG->updateStudent($student);
                     header("Location:/profile");
                     die();
@@ -69,8 +125,9 @@ class ProfileController extends Controller
             }
 
             $this->render('../app/view/profile/profile.php', [
-                'student' => $student,
-                'errors' => $errors
+                'student' => isset($student) ? $student : null,
+                'errors' => isset($errors) ? $errors : null,
+                "token" => isset($token) ? $token : ''
             ]);
         } else {
             header("Location:/registration");
@@ -78,32 +135,4 @@ class ProfileController extends Controller
         }
 
     }
-
-
-    private function grabPostValues(): array
-    {
-        $values = [];
-        $values["name"] = array_key_exists("name", $_POST) ?
-            trim(strval($_POST["name"])) :
-            "";
-        $values["surname"] = array_key_exists("surname", $_POST) ?
-            trim(strval($_POST["surname"])) :
-            "";
-        $values["gender"] = array_key_exists("gender", $_POST) ?
-            strval($_POST["gender"]) :
-            "";
-        $values["group_name"] = array_key_exists("group_name", $_POST) ?
-            trim(strval($_POST["group_name"])) :
-            "";
-        $values["balli"] = array_key_exists("balli", $_POST) ?
-            intval($_POST["balli"]) :
-            0;
-        $values["email"] = array_key_exists("email", $_POST) ?
-            trim(strval($_POST["email"])) :
-            "";
-
-        return $values;
-    }
-
-
 }

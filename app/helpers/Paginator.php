@@ -4,15 +4,33 @@ namespace StudentList\helpers;
 
 class Paginator
 {
+    /**
+     * @var int
+     */
     private $perpage = 5;
+    /**
+     * @var int
+     */
     private $currentPage;
+    /**
+     * @var int
+     */
     private $allPage;
+    /**
+     * @var
+     */
     private $search;
 
+    /**
+     * Paginator constructor.
+     * @param $page
+     * @param $search
+     * @param $cstudents
+     */
     public function __construct($page, $search, $cstudents)
     {
 
-        $this->allPage = ceil($cstudents / $this->perpage);
+        $this->allPage = intval(ceil($cstudents / $this->perpage));
         if ($page > 0 && $page <= $this->allPage) {
 
             $this->currentPage = $page;
@@ -24,35 +42,63 @@ class Paginator
 
     }
 
-    public function getPreviousPage()
+    /**
+     * @return string
+     */
+    public function getPreviousPageHtml()
     {
-
-        return $this->currentPage > 1 ? $this->currentPage - 1 : null;
+        $previousPage = $this->currentPage - 1;
+        return $this->currentPage > 1 ? "<li class='page-item'><a class='page-link' href={$this->getPageUrl($previousPage)} >  {$previousPage }</a> </li>" : '';
     }
 
-
-    public function getPreviousPageUrl()
+    /**
+     * @param $pageNum
+     * @return string
+     */
+    public function getPageUrl($pageNum)
     {
-        $previousPage = $this->currentPage > 1 ? $this->currentPage - 1 : null;
-        return "/?page=" . urlencode($previousPage) . '&search=' . urlencode($this->search);
+        return "?" . http_build_query(["page" => $pageNum,
+                "search" => $this->search]);
     }
 
-
-    public function getNextPageUrl()
+    /**
+     * @return string
+     */
+    public function getNextPageHtml()
     {
-        $nextPage = $this->allPage > 1 && $this->currentPage != $this->allPage ? $this->currentPage + 1 : null;
-        return "/?page=" . urlencode($nextPage) . '&search=' . urlencode($this->search);
+
+
+        $nextPage = $this->currentPage + 1;
+        return $this->allPage > 1 && $this->currentPage != $this->allPage ? "<li class='page-item'><a class='page-link' href={$this->getPageUrl($nextPage)} >  {$nextPage }</a> </li>" : '';
     }
 
-
-    public function getNextPage()
+    /**
+     * @return string
+     */
+    public function getCurrentPageHtml()
     {
-        return $this->allPage > 1 && $this->currentPage != $this->allPage ? $this->currentPage + 1 : null;
+
+
+        $currentPage = $this->currentPage;
+        return $currentPage < $this->allPage || $this->allPage && $this->allPage != 0 > 1 ? "<li class='page-item active'><a
+                  class='page-link'> {$currentPage}</a>
+      </li>" : '';
+
     }
 
+    /**
+     * @return int
+     */
+    public function getAllPage()
+    {
+        return $this->allPage;
+    }
+
+    /**
+     * @return int
+     */
     public function getCurrentPage()
     {
         return $this->currentPage;
     }
-
 }

@@ -1,9 +1,7 @@
 <?php
+error_reporting(-1);
 
 use StudentList\core\Router;
-
-
-session_start();
 
 
 require_once '../vendor/autoload.php';

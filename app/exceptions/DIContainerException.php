@@ -6,8 +6,10 @@ use Exception;
 
 class DIContainerException extends Exception
 {
-    public function getMessage2($name)
+    public function __construct($name)
     {
+        http_response_code(500);
+        error_log('Такого названия как : ' . $name . ';<br> не существует.', 0);
         echo 'Такого названия как : ' . $name . ';<br> не существует.';
         die();
     }

@@ -9,10 +9,20 @@ class DIContainer
      */
     private $dependencies = [];
 
+
+    /**
+     * @param string $name
+     * @param callable $func
+     */
+    public function bindFactory(string $name, callable $func)
+    {
+        $this->dependencies[$name] = $func;
+    }
+
     /**
      * Binds dependency using $dependencies array
      *
-     * @param string $key
+     * @param string $name
      * @param $value
      */
     public function bind(string $name, $value): void
@@ -25,20 +35,17 @@ class DIContainer
      * Returns dependency from $dependencies array
      * Throws an exception if dependency is not found
      *
-     * @param string $key
+     * @param string $name
      *
      * @return mixed
      *
      * @throws \DIContainerException
      */
-    public function get(string $name)
+    public function get($name)
     {
-        try {
-            if (!array_key_exists($name, $this->dependencies)) {
-                throw new \StudentList\exceptions\DIContainerException;
-            }
-        } catch (\StudentList\exceptions\DIContainerException $e) {
-            $e->getMessage2($name);
+
+        if (!array_key_exists($name, $this->dependencies)) {
+            throw new \StudentList\exceptions\DIContainerException($name);
         }
 
 

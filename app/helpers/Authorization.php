@@ -2,37 +2,62 @@
 
 namespace StudentList\helpers;
 
+use StudentList\model\Student;
 
 class Authorization
 {
+    /**
+     * @var
+     */
     private $studentTG;
+    private $cookie;
 
-
-    public function __construct($studentTG)
+    /**
+     * Authorization constructor.
+     * @param $studentTG
+     * @param $cookie
+     */
+    public function __construct($studentTG, $cookie)
     {
         $this->studentTG = $studentTG;
+        $this->cookie = $cookie;
     }
 
-    public function makeAuth($hash)
+    /**
+     * Authorization constructor.
+     * @param $studentTG
+     */
+
+
+    /**
+     * @param $hash
+     */
+    public function makeAuth($hash): void
     {
-        setcookie('hash', $hash, time() + 60 * 60 * 24 * 365 * 10, "/", null, false,
-            true); // Для идентификации пользователя.
+        $this->cookie->setCookie('hash', $hash, time() + 60 * 60 * 24 * 30 * 12 * 10);// Для идентификации пользователя.
     }
 
-    public function IsLoggedIn()
+    /**
+     * @return bool
+     */
+    public function IsLoggedIn(): bool
     {
-        return isset($_COOKIE['hash']) ? true : false;
+        return $this->studentTG->checkAuthUser($this->getHash());
     }
 
-    public function getHash()
+    /**
+     * @return string
+     */
+    public function getHash(): string
     {
-        return $_COOKIE['hash'];
+        return $this->cookie->getCookie('hash');
     }
 
-    public function getAuthUser($hash) // Получение текущего пользователя.
+    /**
+     * @return Student
+     */
+    public function getAuthUser(): Student// Получение текущего пользователя.
     {
-        return $this->studentTG->getStudentByHash($hash);
+        return $this->studentTG->getStudentByHash($this->getHash());
     }
-
-
 }

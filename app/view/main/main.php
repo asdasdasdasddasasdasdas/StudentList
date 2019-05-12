@@ -3,17 +3,20 @@
 
         <header class="d-flex justify-content-center">
             <form action="" class="d-flex" method="get">
-                <input type="text" class="search" name="search" placeholder='Поиск по имени'
+                <input type="text" id="asd" class="search" name="search"
+                       placeholder='Search by name'
                        value=<?= htmlspecialchars($search, ENT_QUOTES); ?>>
                 <button type="submit" class="btn btn-primary">Search</button>
             </form>
             <?php if (!$this->auth->IsLoggedIn()) : ?>
 
-                <a class="ml-5 btn-main btn btn-primary align-self-center" href="/registration">Зарегистрироваться</a>
+                <a class="ml-5 btn-main btn btn-primary align-self-center"
+                   href="/registration">Registrastion</a>
 
             <?php endif; ?>
             <?php if ($this->auth->IsLoggedIn()) : ?>
-                <a class="ml-5 btn-main btn btn-primary align-self-center" href="/profile">В профиль</a>
+                <a class="ml-5 btn-main btn btn-primary align-self-center"
+                   href="/profile">Profile</a>
             <?php endif; ?>
         </header>
 
@@ -43,7 +46,7 @@
             <?php endif; ?>
             <?php if (empty($students)) : ?>
                 <tr>
-                    <td colspan="6" rowspan="2">Данных нет</td>
+                    <td colspan="6" rowspan="2">Data not found</td>
                 </tr>
             <?php endif; ?>
         </table>
@@ -55,19 +58,10 @@
             <nav aria-label="Page navigation example">
 
                 <ul class="pagination pg-blue">
-                    <?php if ($this->paginator->getPreviousPage() !== null): ?>
-                        <li class="page-item"><a class="page-link"
-                                                 href=<?= htmlspecialchars($this->paginator->getPreviousPageUrl()); ?>> <?= htmlspecialchars($this->paginator->getPreviousPage()); ?></a>
-                        </li><?php endif; ?>
-                    <?php if ($this->paginator->getPreviousPage() !== null || $this->paginator->getNextPage() !== null): ?>
-                        <li class="page-item active"><a
-                                    class="page-link"> <?= htmlspecialchars($this->paginator->getCurrentPage()); ?></a>
-                        </li>
-                    <?php endif; ?>
-                    <?php if ($this->paginator->getNextPage() !== null): ?>
-                        <li class="page-item"><a class="page-link"
-                                                 href=<?= htmlspecialchars($this->paginator->getNextPageUrl()) ?>> <?= htmlspecialchars($this->paginator->getNextPage()); ?></a>
-                        </li><?php endif; ?>
+                    <?= $paginator->getPreviousPageHtml(); ?>
+                    <?= $paginator->getCurrentPageHtml(); ?>
+                    <?= $paginator->getNextPageHtml(); ?>
+
                 </ul>
             </nav>
         </div>
@@ -75,3 +69,5 @@
 
     </div>
 </div>
+
+

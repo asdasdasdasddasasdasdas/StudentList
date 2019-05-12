@@ -2,39 +2,46 @@
 
 namespace StudentList\controller;
 
-
-use StudentList\controller\Controller;
-
-class MainController extends Controller
+class MainController extends \StudentList\core\Controller
 {
-    private $studentTG;
+    /**
+     * @var \StudentList\helpers\Authorization
+     */
     protected $auth;
+    /**
+     * @var \StudentList\model\StudentTableGateway
+     */
+    private $studentTG;
 
+    /**
+     * MainController constructor.
+     * @param \StudentList\model\StudentTableGateway $studentTG
+     * @param \StudentList\helpers\Authorization $auth
+     */
     public function __construct(
         \StudentList\model\StudentTableGateway $studentTG,
         \StudentList\helpers\Authorization $auth
-
-    ) {
+    )
+    {
         $this->studentTG = $studentTG;
         $this->auth = $auth;
-
 
     }
 
 
-    public function mainAction()
+    public function mainAction(): void
     {
         $limit = 5;
+        $page = isset($_GET['page']) ? intval($_GET['page']) : null;
+        $search = isset($_GET['search']) ? trim(strval($_GET['search'])) : null;
 
-        $search = trim(strval($_GET['search']));
-        $countStudents = $_GET['search'] !== '' ? $this->studentTG->countStudentsBySearch($search) : $this->studentTG->countAllStudent();
-        $this->paginator = new \StudentList\helpers\Paginator(intval($_GET['page']), $search, $countStudents);
+        $countStudents = isset($_GET['search']) ? $this->studentTG->countStudentsBySearch($search) : $this->studentTG->countAllStudent();
+        $paginator = new \StudentList\helpers\Paginator($page, $search, $countStudents);
 
-        $offset = $limit * ($this->paginator->getCurrentPage() - 1);
+        $offset = $limit * ($paginator->getCurrentPage() - 1);
 
-        $students = $_GET['search'] !== '' ? $this->studentTG->SearchStudents($offset, $limit,
-            $search) : $this->studentTG->getStudents($offset, $limit);
+        $students = isset($search) ? $this->studentTG->searchStudents($offset, $limit, $search) : $this->studentTG->getStudents($offset, $limit);
 
-        $this->render('../app/view/main/main.php', ['students' => $students, 'search' => $search]);
+        $this->render('../app/view/main/main.php', ['students' => $students, 'search' => $search, 'paginator' => $paginator]);
     }
 }

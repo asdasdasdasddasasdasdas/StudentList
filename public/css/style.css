@@ -72,8 +72,8 @@ td:last-child {
 
 }
 
-.label {
-    margin-left: 5px;
+form .label {
+
     float: left;
 }
 

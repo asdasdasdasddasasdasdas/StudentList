@@ -2,148 +2,190 @@
 
 namespace StudentList\model;
 
-use StudentList\config\DBConnector;
-use StudentList\model\Student;
 use PDO;
+use StudentList\config\DBConnector;
 
 class StudentTableGateway
 {
+    /**
+     * @var PDO
+     */
     protected $db;
 
-    function __construct()
+    /**
+     * StudentTableGateway constructor.
+     * @param array $config
+     */
+    function __construct(array $config)
     {
-        $DBConnector = DBConnector::getInstance();
 
-        $this->db = new PDO('mysql:host=' . $DBConnector->connection['host'] .
-            ';dbname=' . $DBConnector->connection['name'] . ';charset=' . $DBConnector->connection['charset'] . ';',
-            $DBConnector->connection['user'],
-            $DBConnector->connection['password']
-        );
+
+        $this->db = new PDO('mysql:host=' . $config['host'] .
+            ';dbname=' . $config['name'] . ';charset=' . $config['charset'] . ';',
+            $config['user'],
+            $config['password']);
 
 
     }
 
-    private function query($sql, $params = [])
+    /**
+     * @param string $hash
+     * @return bool
+     */
+    public function checkAuthUser(string $hash): bool
     {
-        $stmt = $this->db->prepare($sql);
-        if (!empty($params)) {
-
-            foreach ($params as $key => $value) {
-                $stmt->bindValue(':' . $key, $value);
-            }
-        }
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM students where hash=:hash");
+        $stmt->bindValue(':hash', $hash);
         $stmt->execute();
-
-        return $stmt;
+        return $stmt->fetchColumn() != 0 ? true : false;
     }
 
-
-    public function countStudentsBySearch($keyword): int
+    /**
+     * @param string $keyword
+     * @return int
+     */
+    public function countStudentsBySearch(string $keyword): int
     {
         $keyword = "%$keyword%";
-        $result = $this->query("SELECT COUNT(*) FROM students
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM students
            WHERE name
-           LIKE :keyword",
-            ['keyword' => $keyword]);
-
-        return intval($result->fetchColumn());
+           LIKE :keyword");
+        $stmt->bindValue(":keyword", $keyword);
+        $stmt->execute();
+        return intval($stmt->fetchColumn());
 
     }
 
-    public function SearchStudents($offset, $limit, $keyword): array
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $keyword
+     * @return array
+     */
+    public function SearchStudents(int $offset, int $limit, string $keyword): array
     {
         $keyword = "%$keyword%";
+
         $stmt = $this->db->prepare("SELECT * FROM students
            WHERE name
            LIKE :keyword
-           LIMIT :limit
-           OFFSET :offset");
+           ORDER BY id DESC
+           LIMIT :offset, :limit
+            ");
 
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->bindValue(':keyword', $keyword);
         $stmt->execute();
+
         return $stmt->fetchAll(PDO::FETCH_CLASS);
     }
 
-
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @return array
+     */
     public function getStudents(int $offset, int $limit): array
     {
         $stmt = $this->db->prepare("SELECT *
            FROM students
-           LIMIT :limit
-           OFFSET :offset");
+           ORDER BY id DESC
+           LIMIT :offset, :limit
+          ");
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
+
         return $stmt->fetchAll(PDO::FETCH_CLASS);
     }
 
-
+    /**
+     * @return int
+     */
     public function countAllStudent(): int
     {
-        $result = $this->query("SELECT COUNT(*) FROM students");
-        return intval($result->fetchColumn());
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM students");
+        $stmt->execute();
+        return intval($stmt->fetchColumn());
     }
 
-
+    /**
+     * @param string $hash
+     * @return \StudentList\model\Student
+     */
     public function getStudentByHash(string $hash): Student
     {
-        $result = $this->query("SELECT * FROM students WHERE hash=:hash",
-            ['hash' => $hash]);
-        return $result->fetchObject('StudentList\model\Student');
+        $stmt = $this->db->prepare("SELECT * FROM students WHERE hash=:hash");
+        $stmt->bindValue(":hash", $hash);
+        $stmt->execute();
+        return $stmt->fetchObject('StudentList\model\Student');
     }
 
-
+    /**
+     * @param \StudentList\model\Student $student
+     */
     public function addStudent(Student $student): void
     {
 
-        $result = $this->query('INSERT INTO students (name, surname, balli, group_name, gender, email, hash)
-           VALUES (:name, :surname, :balli, :group_name, :gender, :email, :hash)',
-            [
-                'name' => $student->name,
-                'surname' => $student->surname,
-                'balli' => $student->balli,
-                'group_name' => $student->group_name,
-                'gender' => $student->gender,
-                'email' => $student->email,
-                'hash' => $student->hash
-            ]);
-
+        $stmt = $this->db->prepare('INSERT INTO students (name, surname, balli, group_name, gender, email, hash)
+           VALUES (:name, :surname, :balli, :group_name, :gender, :email, :hash)');
+        $stmt->bindValue(":name", $student->name);
+        $stmt->bindValue(":surname", $student->surname);
+        $stmt->bindValue(":balli", $student->balli);
+        $stmt->bindValue(":group_name", $student->group_name);
+        $stmt->bindValue(":gender", $student->gender);
+        $stmt->bindValue(":email", $student->email);
+        $stmt->bindValue(":hash", $student->hash);
+        $stmt->execute();
     }
 
+    /**
+     * @param \StudentList\model\Student $student
+     */
     public function updateStudent(Student $student): void
     {
-        $this->query("UPDATE students
+        $stmt = $this->db->prepare("UPDATE students
            SET name=:name,
            surname=:surname,
            balli=:balli,
            group_name=:group_name,
            gender=:gender,
            email=:email
-           WHERE hash=:hash",
-            [
-                'name' => $student->name,
-                'surname' => $student->surname,
-                'balli' => $student->balli,
-                'group_name' => $student->group_name,
-                'gender' => $student->gender,
-                'email' => $student->email,
-                'hash' => $student->hash
-            ]);
+           WHERE hash=:hash");
+        $stmt->bindValue(":name", $student->name);
+        $stmt->bindValue(":surname", $student->surname);
+        $stmt->bindValue(":balli", $student->balli);
+        $stmt->bindValue(":group_name", $student->group_name);
+        $stmt->bindValue(":gender", $student->gender);
+        $stmt->bindValue(":email", $student->email);
+        $stmt->bindValue(":hash", $student->hash);
+        $stmt->execute();
+
     }
 
+    /**
+     * @param string $email
+     * @param null $id
+     * @return bool
+     */
     public function checkEmail(string $email, $id = null): bool
     {
 
-        $result = $this->query("SELECT id, email FROM students WHERE email=:email", ['email' => $email]);
-        $result = $result->fetch(PDO::FETCH_ASSOC);
-        if ($result == null) {
-            return false;
-        } elseif ($result['id'] == $id && $result['email'] == $email) {
-            return false;
+        if ($id) {
+            $stmt = $this->db->prepare("SELECT COUNT(*) FROM students WHERE email=:email AND id<>:id");
+            $stmt->bindValue(":id", $id);
+            $stmt->bindValue(":email", $email);
+
         } else {
-            return true;
+            $stmt = $this->db->prepare("SELECT COUNT(*) FROM students WHERE email=:email", ['email' => $email]);
+            $stmt->bindValue(":email", $email);
         }
+        $stmt->execute();
+        $result = intval($stmt->fetchColumn());
+
+        return $result > 0;
     }
+
+
 }
