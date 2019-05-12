@@ -1,2 +1,4 @@
+# folder
 vendor/
+# config db
 app/config/config.php
