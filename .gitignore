@@ -1,4 +1,4 @@
 # folder
-vendor/
+/vendor/
 # config db
-app/config/config.php
+/app/config/config.php
