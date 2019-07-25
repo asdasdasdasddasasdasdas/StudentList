@@ -4,4 +4,4 @@ vendor
 .htaccess
 app/config/config.php
 composer.json
-compose.lock
+composer.lock
