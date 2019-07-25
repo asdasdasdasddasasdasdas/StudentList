@@ -6,17 +6,22 @@ use Exception;
 
 class ControllerException extends Exception
 {
-    public function __construct()
+    private $templatePath = '../app/view/404.php';
+
+    public function __construct($code = 404)
     {
-        http_response_code(404);
+        $this->code = $code;
     }
 
-    public function get404($action): void
+    /**
+     * @return string
+     */
+    public function getTemplatePath()
     {
-        $path = '../app/view/404.php';
-        require '../app/view/layouts/def.php';
-        die();
+        return $this->templatePath;
     }
+
+
 
 
 }

@@ -1,5 +1,7 @@
-# folder
+
 .idea
 vendor
-# config db
+.htaccess
 app/config/config.php
+composer.json
+compose.lock

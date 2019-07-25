@@ -6,11 +6,11 @@ use Exception;
 
 class DIContainerException extends Exception
 {
-    public function __construct($name)
+
+    public function __construct($code,$message)
     {
-        http_response_code(500);
-        error_log('Такого названия как : ' . $name . ';<br> не существует.', 0);
-        echo 'Такого названия как : ' . $name . ';<br> не существует.';
-        die();
+
+       $this->code = $code;
+       $this->message = $message;
     }
 }

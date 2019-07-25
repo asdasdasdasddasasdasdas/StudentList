@@ -8,8 +8,9 @@ use StudentList\model\StudentTableGateway;
 class StudentValidator
 {
 
+
     /**
-     * @var
+     * @var StudentTableGateway
      */
     private $studentTG;
 
@@ -27,15 +28,15 @@ class StudentValidator
      * @param $student
      * @return array
      */
-    public function validateAll($student, $token): array // Проверяет все входящие данные из формы.
+    public function validateAll($student, $token)// Проверяет все входящие данные из формы.
     {
         $errors = [];
-        $errors['name_error'] = $this->validateName($student->name);
-        $errors['surname_error'] = $this->validateSurname($student->surname);
-        $errors['group_name_error'] = $this->validateGroup($student->group_name);
-        $errors['gender_error'] = $this->validateGender($student->gender);
-        $errors['balli_error'] = $this->validateBalli($student->balli);
-        $errors['email_error'] = $this->validateEmail($student->email, $student->id);
+        $errors['name_error'] = $this->validateName($student->getName());
+        $errors['surname_error'] = $this->validateSurname($student->getSurname());
+        $errors['group_name_error'] = $this->validateGroup($student->getGroupName());
+        $errors['gender_error'] = $this->validateGender($student->getGender());
+        $errors['balli_error'] = $this->validateBalli($student->getBalli());
+        $errors['email_error'] = $this->validateEmail($student->getEmail(), $student->getId());
         $errors['token_error'] = $token;
         return array_filter($errors, function ($value) {
             return $value !== null;
@@ -50,7 +51,7 @@ class StudentValidator
     {
         $length = mb_strlen($name);
         if ($length > 40) {
-            return "Длина Имени не должна превышать 40 символов, а вы ввели {$length}";
+            return "Длина имени не должна превышать 40 символов, а вы ввели {$length}";
         } elseif ($length == 0) {
             return "Вы не ввели имя";
         }

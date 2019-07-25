@@ -6,17 +6,8 @@ namespace StudentList\core;
 abstract class Controller
 {
 
-
-    /**
-     * @param $path
-     * @param array $params
-     */
-
-
-    public function render($path, $params = []): void
+    public function execute($action, $request, $response)
     {
-        extract($params, EXTR_SKIP);
-        require_once "../app/view/layouts/def.php";
+        $this->$action($request, $response);
     }
-
 }

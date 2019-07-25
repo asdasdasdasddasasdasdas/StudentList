@@ -1,8 +1,9 @@
-<div class="row align-items-end mt-4">
+<div class = "form-wrapper">
+<div class="row align-items-end mt-5">
     <div class="col-6 ">
-        <label for="float-left">Name:</label><br>
-        <input class="form-control " type="text" name="name"
-               value="<?= isset($student->name) ? htmlspecialchars($student->name) : ''; ?>" required>
+        <label class="label">Name:</label><br>
+        <input class="form-control" type="text" name="name"
+               value="<?= $student->getName() ? htmlspecialchars($student->getName()) : ''; ?>" required>
     </div>
 
     <?php if (isset($errors['name_error'])) : ?>
@@ -16,7 +17,7 @@
     <div class="col-6">
         <label class="label" for="">Surname:</label>
         <input class="form-control " type="text" name="surname"
-               value="<?= isset($student->surname) ? htmlspecialchars($student->surname) : ''; ?>" required>
+               value="<?= $student->getSurname() ? htmlspecialchars($student->getSurname()) : ''; ?>" required>
     </div>
     <?php if (isset($errors['surname_error'])) : ?>
         <div class="col-6">
@@ -28,7 +29,7 @@
     <div class="col-6">
         <label class="label" for="">Group:</label>
         <input class="form-control " type="text" name="group_name"
-               value="<?= isset($student->group_name) ? htmlspecialchars($student->group_name) : ''; ?>" required>
+               value="<?= $student->getGroupName() ? htmlspecialchars($student->getGroupName()) : ''; ?>" required>
     </div>
     <?php if (isset($errors['group_name_error'])) : ?>
         <div class="col-6">
@@ -40,7 +41,7 @@
     <div class="col-6">
         <label class="label" for="">Ege:</label>
         <input class="form-control " type="number" name="balli"
-               value="<?= isset($student->balli) ? htmlspecialchars($student->balli) : ''; ?>" required>
+               value="<?= $student->getBalli() ? htmlspecialchars($student->getBalli()) : ''; ?>" required>
     </div>
     <?php if (isset($errors['balli_error'])) : ?>
         <div class="col-6">
@@ -52,7 +53,7 @@
     <div class="col-6">
         <label class="label" for="">Email:</label>
         <input class="form-control " type="email" name="email"
-               value="<?= isset($student->email) ? htmlspecialchars($student->email) : ''; ?>" required>
+               value="<?= $student->getEmail() ? htmlspecialchars($student->getEmail()) : ''; ?>" required>
     </div>
     <?php if (isset($errors['email_error'])) : ?>
         <div class="col-6">
@@ -60,39 +61,40 @@
         </div>
     <?php endif; ?>
 </div>
+
+
 <div class="row align-items-end mt-4">
     <div class="col-6">
-        <div class="form-check">
-            <input type="radio" name="gender" class="form-check-input"
-                   value="f" <?= isset($student->gender) && $student->gender == 'f' ? 'checked=checked' : ''; ?>>
 
-            <label class="form-check-label" for="gender">Female</label>
-        </div>
-        <br>
-        <div class="form-check">
-            <input type="radio" name="gender" class="form-check-input"
-                   value="m" <?= isset($student->gender) && $student->gender == 'm' ? 'checked=checked' : ''; ?> >
+        <label class="label" for="gender">Gender:</label>
 
-            <label class="form-check-label" for="gender">Male</label>
-        </div>
+
+        <select class="profile-form-select float-left" name="gender">
+            <option>. . .</option>
+            <option value="m" <?= $student->getGender() == "m" ? "selected" : "" ?>>Male</option>
+            <option value="f" <?= $student->getGender() == "f" ? "selected" : "" ?>>Female</option>
+        </select>
+
     </div>
     <?php if (isset($errors['gender_error'])) : ?>
         <div class="col-6 ">
-        <span id='asd'
-              class="text-danger align-middle"><?= isset($errors['gender_error']) ? htmlspecialchars($errors['gender_error']) : ''; ?></span><br>
+            <span class="text-danger"><?= isset($errors['gender_error']) ? htmlspecialchars($errors['gender_error']) : ''; ?></span><br>
         </div>
     <?php endif; ?>
 </div>
-<div class="row mt-4"></div>
-<input type="hidden" name="token" value=<?= $token ?>>
-<?php if (isset($errors['token_error'])) : ?>
-    <div class="col-12 ">
+
+<div class="row mt-4">
+    <input type="hidden" name="token" value=<?= $token ?>>
+    <?php if (isset($errors['token_error'])) : ?>
+        <div class="col-12 ">
 <span
         class="text-danger align-middle"><?= isset($errors['token_error']) ? htmlspecialchars($errors['token_error']) : ''; ?></span><br>
-    </div>
-<?php endif; ?>
+        </div>
+    <?php endif; ?>
+</div>
 <button type="submit" class="btn btn-primary" name="submit">Submit
 </button>
+</div>
 </form>
 
 <a id="btn" class="btn btn-primary btn-block" href="/">back to main</a>

@@ -2,15 +2,13 @@
 
 namespace StudentList\controller;
 
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use StudentList\core\View;
 use StudentList\model\Student;
 
 class ProfileController extends \StudentList\core\Controller
 {
-    /**
-     * @var \StudentList\helpers\Util
-     */
-    private $util;
-
     /**
      * @var \StudentList\model\StudentTableGateway
      */
@@ -28,110 +26,89 @@ class ProfileController extends \StudentList\core\Controller
      * @var \StudentList\helpers\CSRF
      */
     private $csrf;
+    private $view;
 
     /**
      * ProfileController constructor.
      * @param \StudentList\model\StudentTableGateway $studentTG
      * @param \StudentList\helpers\StudentValidator $validator
      * @param \StudentList\helpers\Authorization $auth
-     * @param \StudentList\helpers\Util $util
      * @param \StudentList\helpers\CSRF $csrf
      */
     public function __construct(\StudentList\model\StudentTableGateway $studentTG,
                                 \StudentList\helpers\StudentValidator $validator,
                                 \StudentList\helpers\Authorization $auth,
-                                \StudentList\helpers\Util $util,
                                 \StudentList\helpers\CSRF $csrf)
     {
-        $this->util = $util;
+
         $this->studentTG = $studentTG;
         $this->auth = $auth;
         $this->validator = $validator;
         $this->csrf = $csrf;
+        $this->view = new View();
     }
 
 
     /**
      * @throws \Exception
      */
-    public function registration(): void
+    public function registrationAction(RequestInterface $request,ResponseInterface $response)
     {
 
         if (!$this->auth->IsLoggedIn()) {
             $token = $this->csrf->makeToken();
-            if (!empty($_POST)) {
-
-                $student = new Student;
-
-
-                $student->fill($this->grabStudentValues());
-                $errors = $this->validator->ValidateAll($student, $this->csrf->checkToken());
+            $student = new Student;
+            if (!empty($request->getParsedBody())) {
+                $student->fill($request->getParsedBody());
+                $errors = $this->validator->ValidateAll($student, $this->csrf->checkToken($request->getParsedBody()["token"]));
                 if (empty($errors)) {
                     $student->generateHash();
                     $this->studentTG->addStudent($student);
-                    $this->auth->makeAuth($student->hash);
-                    header("Location:/profile");
-                    die();
+                    $this->auth->makeAuth($student->getHash());
+                    return $response->withHeader("location","/profile");
                 }
             }
-            $this->render('../app/view/registration/registration.php', [
-                'errors' => isset($errors) ? $errors : null,
+
+           return $this->view->render('../app/view/registration/registration.php', $response, [
+                'errors' => isset($errors) ? $errors : '',
                 'student' => isset($student) ? $student : '',
                 "token" => isset($token) ? $token : ''
             ]);
         } else {
-            header('Location:/');
-            die();
+           return $response->withHeader("location","/profile");;
+
         }
-    }
-
-    /**
-     * @return array
-     */
-    private function grabStudentValues(): array
-    {
-        $values = [];
-        $values["name"] = $this->util->grabValue("name");
-        $values["surname"] = $this->util->grabValue("surname");
-        $values["gender"] = $this->util->grabValue("gender");
-        $values["group_name"] = $this->util->grabValue("group_name");
-        $values["balli"] = $this->util->grabValue("balli");
-        $values["email"] = $this->util->grabValue("email");
-
-
-        return $values;
     }
 
     /**
      *
      */
-    public function profile(): void
+    public function profileAction(RequestInterface $request,ResponseInterface $response)
     {
         if ($this->auth->IsLoggedIn()) {
+
             $token = $this->csrf->makeToken();
             $student = $this->auth->getAuthUser();
-            if (!empty($_POST)) {
-
-                $student->fill($this->grabStudentValues());
-                $student->hash = $this->auth->getHash();
-                $errors = $this->validator->validateAll($student, $this->csrf->checkToken());
+            if (!empty($request->getParsedBody())) {
+                $student->fill($request->getParsedBody());
+                $student->setHash($this->auth->getHash());
+                $errors = $this->validator->validateAll($student, $this->csrf->checkToken($request->getParsedBody()["token"]));
 
                 if (empty($errors)) {
-
                     $this->studentTG->updateStudent($student);
-                    header("Location:/profile");
-                    die();
+
+                    $response->withHeader("location","/profile");
                 }
             }
 
-            $this->render('../app/view/profile/profile.php', [
-                'student' => isset($student) ? $student : null,
-                'errors' => isset($errors) ? $errors : null,
+           return $this->view->render('../app/view/profile/profile.php', $response, [
+                'student' => isset($student) ? $student : '',
+                'errors' => isset($errors) ? $errors : '',
                 "token" => isset($token) ? $token : ''
             ]);
         } else {
-            header("Location:/registration");
-            die();
+            return $response->withHeader("location","/registration");
+
         }
 
     }

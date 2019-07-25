@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'StudentList\\' => array($baseDir . '/app'),
+    'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
 );

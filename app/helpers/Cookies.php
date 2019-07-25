@@ -4,7 +4,7 @@
 namespace StudentList\helpers;
 
 
-class Cookie
+class Cookies
 {
 
     /**
@@ -32,7 +32,7 @@ class Cookie
      */
     public function deleteCookie($name)
     {
-        unset($_COOKIE[$name]);
+        unset($this->cookie[$name]);
     }
 
     /**

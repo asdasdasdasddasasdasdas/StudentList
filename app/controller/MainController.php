@@ -2,6 +2,11 @@
 
 namespace StudentList\controller;
 
+
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use StudentList\core\View;
+
 class MainController extends \StudentList\core\Controller
 {
     /**
@@ -13,6 +18,8 @@ class MainController extends \StudentList\core\Controller
      */
     private $studentTG;
 
+    private $view;
+
     /**
      * MainController constructor.
      * @param \StudentList\model\StudentTableGateway $studentTG
@@ -23,25 +30,31 @@ class MainController extends \StudentList\core\Controller
         \StudentList\helpers\Authorization $auth
     )
     {
+        $this->view = new View();
         $this->studentTG = $studentTG;
         $this->auth = $auth;
 
     }
 
 
-    public function mainAction(): void
+    public function mainAction(RequestInterface $request,ResponseInterface $response)
     {
+        $queryParams = $request->getQueryParams();
         $limit = 5;
-        $page = isset($_GET['page']) ? intval($_GET['page']) : null;
-        $search = isset($_GET['search']) ? trim(strval($_GET['search'])) : null;
-
-        $countStudents = isset($_GET['search']) ? $this->studentTG->countStudentsBySearch($search) : $this->studentTG->countAllStudent();
-        $paginator = new \StudentList\helpers\Paginator($page, $search, $countStudents);
-
+        $sort = empty($queryParams['sort']) ? null : trim(strval($queryParams['sort']));
+        $page = empty($queryParams['page']) ? null : intval($queryParams['page']);
+        $search = empty($queryParams['search']) ? null : trim(strval($queryParams['search']));
+        $marker = new \StudentList\helpers\Marker($search);
+        $countStudents = $this->studentTG->countAllStudent($search);
+        $paginator = new \StudentList\helpers\Paginator($page, $search, $countStudents, $sort);
         $offset = $limit * ($paginator->getCurrentPage() - 1);
+        $students = $this->studentTG->getStudents($offset, $limit, $sort, $search);
 
-        $students = isset($search) ? $this->studentTG->searchStudents($offset, $limit, $search) : $this->studentTG->getStudents($offset, $limit);
-
-        $this->render('../app/view/main/main.php', ['students' => $students, 'search' => $search, 'paginator' => $paginator]);
+        return $this->view->render('../app/view/main/main.php', $response, [
+            'marker' => $marker,
+            'students' => $students,
+            'search' => $search,
+            'paginator' => $paginator,
+            'auth' => $this->auth]);
     }
 }

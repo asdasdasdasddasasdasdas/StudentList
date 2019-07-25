@@ -7,17 +7,17 @@ namespace StudentList\helpers;
 class CSRF
 {
     /**
-     * @var
+     * @var Cookies
      */
-    private $cookie;
+    private $cookies;
 
     /**
      * CSRF constructor.
-     * @param $Cookie
+     * @param Cookies $cookies
      */
-    public function __construct($cookie)
+    public function __construct(Cookies $cookies)
     {
-        $this->cookie = $cookie;
+        $this->cookies = $cookies;
     }
 
     /**
@@ -26,12 +26,12 @@ class CSRF
      */
     public function makeToken(): string
     {
-        if ($this->cookie->issetCookie('token')) {
-            $token = $this->cookie->getCookie('token');
-            $this->cookie->setCookie('token', $token, time() + 3600);
+        if ($this->cookies->issetCookie('token')) {
+            $token = $this->cookies->getCookie('token');
+            $this->cookies->setCookie('token', $token, time() + 3600);
         } else {
             $token = bin2hex(random_bytes(32));
-            $this->cookie->setCookie('token', $token, time() + 3600);
+            $this->cookies->setCookie('token', $token, time() + 3600);
         }
         return $token;
     }
@@ -39,10 +39,10 @@ class CSRF
     /**
      * @return array
      */
-    public function checkToken()
+    public function checkToken($token)
     {
 
-        if ($_POST['token'] !== $this->cookie->getCookie('token') || empty($_POST['token']) || empty($this->cookie->getCookie('token'))) {
+        if ($token !== $this->cookies->getCookie('token') || empty($token) || empty($this->cookies->getCookie('token'))) {
             return 'Ошибка';
         }
         return null;

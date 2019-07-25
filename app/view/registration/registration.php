@@ -1,5 +1,5 @@
 <div>
     <form method="post" class="bmd-form-group-lg profile-form border border-light">
-        <p class="h4 mb-4 text-center">Registration</p>
+        <div class="header primary-color text-center text-white p-3" ><p class="h5">Registration</p></div>
 
         <?php include_once '../app/view/partials/form.php' ?>

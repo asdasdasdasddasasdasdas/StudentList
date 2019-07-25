@@ -5,6 +5,10 @@ namespace StudentList\helpers;
 class Paginator
 {
     /**
+     * @var string
+     */
+    private $sort;
+    /**
      * @var int
      */
     private $perpage = 5;
@@ -27,7 +31,7 @@ class Paginator
      * @param $search
      * @param $cstudents
      */
-    public function __construct($page, $search, $cstudents)
+    public function __construct($page, $search, $cstudents, $sort = "asc")
     {
 
         $this->allPage = intval(ceil($cstudents / $this->perpage));
@@ -38,6 +42,7 @@ class Paginator
             $this->currentPage = 1;
         }
 
+        $this->sort = $sort;
         $this->search = $search;
 
     }
@@ -51,6 +56,21 @@ class Paginator
         return $this->currentPage > 1 ? "<li class='page-item'><a class='page-link' href={$this->getPageUrl($previousPage)} >  {$previousPage }</a> </li>" : '';
     }
 
+    public function getSortLink()
+    {
+
+        if ($this->sort === null) {
+            $sort = "up";
+        } else if ($this->sort === "up") {
+            $sort = "down";
+        } else {
+            $sort = null;
+        }
+        return "?" . http_build_query(["page" => $this->currentPage,
+                "search" => $this->search, "sort" => $sort]);
+
+    }
+
     /**
      * @param $pageNum
      * @return string
@@ -58,7 +78,7 @@ class Paginator
     public function getPageUrl($pageNum)
     {
         return "?" . http_build_query(["page" => $pageNum,
-                "search" => $this->search]);
+                "search" => $this->search, "sort" => $this->sort]);
     }
 
     /**
@@ -101,4 +121,17 @@ class Paginator
     {
         return $this->currentPage;
     }
+
+    /**
+     * @return string
+     */
+    public function getSort()
+    {
+        if ($this->sort == "up") {
+            return "▼";
+        } else if ($this->sort == "down") {
+            return "▲";
+        }
+    }
+
 }

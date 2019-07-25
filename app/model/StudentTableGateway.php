@@ -41,71 +41,50 @@ class StudentTableGateway
     }
 
     /**
-     * @param string $keyword
+     * @param int $offset
+     * @param int $limit
+     * @param $order
+     * @param $keyword
+     * @return array
+     */
+    public function getStudents(int $offset, int $limit, $order, $keyword): array
+    {
+        $keyword = "%$keyword%";
+        if ($order == "down") {
+            $order = "ORDER BY balli ASC";
+        } else if ($order == "up") {
+            $order = "ORDER BY balli DESC";
+        } else {
+            $order = "ORDER BY id DESC";
+        }
+        $stmt = $this->db->prepare("SELECT *
+           FROM students
+           WHERE name LIKE
+           :keyword
+            " . $order . "
+           LIMIT :offset, :limit
+          ");
+
+        $stmt->bindValue(':keyword', $keyword);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_CLASS, "StudentList\model\Student");
+    }
+
+
+    /**
+     * @param $keyword
      * @return int
      */
-    public function countStudentsBySearch(string $keyword): int
+    public function countAllStudent($keyword): int
     {
         $keyword = "%$keyword%";
         $stmt = $this->db->prepare("SELECT COUNT(*) FROM students
            WHERE name
            LIKE :keyword");
-        $stmt->bindValue(":keyword", $keyword);
-        $stmt->execute();
-        return intval($stmt->fetchColumn());
-
-    }
-
-    /**
-     * @param int $offset
-     * @param int $limit
-     * @param string $keyword
-     * @return array
-     */
-    public function SearchStudents(int $offset, int $limit, string $keyword): array
-    {
-        $keyword = "%$keyword%";
-
-        $stmt = $this->db->prepare("SELECT * FROM students
-           WHERE name
-           LIKE :keyword
-           ORDER BY id DESC
-           LIMIT :offset, :limit
-            ");
-
-        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->bindValue(':keyword', $keyword);
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_CLASS);
-    }
-
-    /**
-     * @param int $offset
-     * @param int $limit
-     * @return array
-     */
-    public function getStudents(int $offset, int $limit): array
-    {
-        $stmt = $this->db->prepare("SELECT *
-           FROM students
-           ORDER BY id DESC
-           LIMIT :offset, :limit
-          ");
-        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_CLASS);
-    }
-
-    /**
-     * @return int
-     */
-    public function countAllStudent(): int
-    {
-        $stmt = $this->db->prepare("SELECT COUNT(*) FROM students");
         $stmt->execute();
         return intval($stmt->fetchColumn());
     }
@@ -130,13 +109,13 @@ class StudentTableGateway
 
         $stmt = $this->db->prepare('INSERT INTO students (name, surname, balli, group_name, gender, email, hash)
            VALUES (:name, :surname, :balli, :group_name, :gender, :email, :hash)');
-        $stmt->bindValue(":name", $student->name);
-        $stmt->bindValue(":surname", $student->surname);
-        $stmt->bindValue(":balli", $student->balli);
-        $stmt->bindValue(":group_name", $student->group_name);
-        $stmt->bindValue(":gender", $student->gender);
-        $stmt->bindValue(":email", $student->email);
-        $stmt->bindValue(":hash", $student->hash);
+        $stmt->bindValue(":name", $student->getName());
+        $stmt->bindValue(":surname", $student->getSurname());
+        $stmt->bindValue(":balli", $student->getBalli());
+        $stmt->bindValue(":group_name", $student->getGroupName());
+        $stmt->bindValue(":gender", $student->getGender());
+        $stmt->bindValue(":email", $student->getEmail());
+        $stmt->bindValue(":hash", $student->getHash());
         $stmt->execute();
     }
 
@@ -153,13 +132,13 @@ class StudentTableGateway
            gender=:gender,
            email=:email
            WHERE hash=:hash");
-        $stmt->bindValue(":name", $student->name);
-        $stmt->bindValue(":surname", $student->surname);
-        $stmt->bindValue(":balli", $student->balli);
-        $stmt->bindValue(":group_name", $student->group_name);
-        $stmt->bindValue(":gender", $student->gender);
-        $stmt->bindValue(":email", $student->email);
-        $stmt->bindValue(":hash", $student->hash);
+        $stmt->bindValue(":name", $student->getName());
+        $stmt->bindValue(":surname", $student->getSurname());
+        $stmt->bindValue(":balli", $student->getBalli());
+        $stmt->bindValue(":group_name", $student->getGroupName());
+        $stmt->bindValue(":gender", $student->getGender());
+        $stmt->bindValue(":email", $student->getEmail());
+        $stmt->bindValue(":hash", $student->getHash());
         $stmt->execute();
 
     }

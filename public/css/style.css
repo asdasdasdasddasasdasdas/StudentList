@@ -1,14 +1,18 @@
 html, body {
     overflow-x: hidden;
 }
-
+.d{
+    background: darkblue;
+    color:greenyellow;
+}
 .main-table thead th {
     background-color: rgb(25, 112, 255);
     color: white;
 }
 
-.main-table td {
 
+.main-table td {
+    min-width: 150px;
     border-bottom: 1px solid rgb(232, 232, 232);
 
 }
@@ -17,13 +21,14 @@ html, body {
     box-sizing: border-box;
 }
 
-td:last-child {
+.main-table td:last-child {
     border-right: 0px solid rgb(232, 232, 232);
 }
 
 .profile-form {
+    margin-top: 40px;
     width: 600px;
-    padding: 20px 20px;
+
 }
 
 .container-fluid {
@@ -32,7 +37,7 @@ td:last-child {
 
 .main-table table {
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
-
+    min-width: 1000px;
 }
 
 .error-h1 {
@@ -46,19 +51,22 @@ td:last-child {
 }
 
 .profile-form span.text-danger {
-    width: auto;
     font-size: 14px;
-    float: left;
-    display: flex;
-    align-self: center;
-}
-
-.col-lg-6:last-child {
-
-    align-content: center;
-    display: flex;
 
 }
+
+.profile-form-select {
+
+    margin-left: 15px;
+    border-left-color: white;
+    border-right-color: white;
+    border-top-color: white;
+
+    color: #666;
+    width: 100px;
+    padding-left: 10px;
+}
+
 
 .search {
     margin-top: 6px;
@@ -72,7 +80,7 @@ td:last-child {
 
 }
 
-form .label {
+.profile-form .label {
 
     float: left;
 }
@@ -82,4 +90,11 @@ form .label {
     line-height: 40px;
     height: 50px;
     padding: 5px 10px;
+}
+
+.text-marker {
+    background: #fb3;
+}
+.form-wrapper{
+    margin: 20px 20px;
 }

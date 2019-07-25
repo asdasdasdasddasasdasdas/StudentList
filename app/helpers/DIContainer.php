@@ -2,22 +2,14 @@
 
 namespace StudentList\helpers;
 
+use StudentList\exceptions\DIContainerException;
+
 class DIContainer
 {
     /**
      * @var array
      */
     private $dependencies = [];
-
-
-    /**
-     * @param string $name
-     * @param callable $func
-     */
-    public function bindFactory(string $name, callable $func)
-    {
-        $this->dependencies[$name] = $func;
-    }
 
     /**
      * Binds dependency using $dependencies array
@@ -43,12 +35,15 @@ class DIContainer
      */
     public function get($name)
     {
+        try {
 
-        if (!array_key_exists($name, $this->dependencies)) {
-            throw new \StudentList\exceptions\DIContainerException($name);
+            if (!array_key_exists($name, $this->dependencies)) {
+                throw new DIContainerException(503, 'Service Unavailable');
+            }
+
+        } catch(DIContainerException $e) {
+        echo 'Error: ' . $e->getCode(). ' ' . $e->getMessage(); die();
         }
-
-
         return $this->dependencies[$name];
     }
 }

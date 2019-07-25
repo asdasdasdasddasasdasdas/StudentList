@@ -3,24 +3,28 @@
 namespace StudentList\helpers;
 
 use StudentList\model\Student;
+use StudentList\model\StudentTableGateway;
 
 class Authorization
 {
+
     /**
-     * @var
+     * @var StudentTableGateway
      */
     private $studentTG;
-    private $cookie;
+    /**
+     * @var Cookies
+     */
+    private $cookies;
 
     /**
      * Authorization constructor.
-     * @param $studentTG
-     * @param $cookie
+     * @param StudentTableGateway $studentTG
      */
-    public function __construct($studentTG, $cookie)
+    public function __construct(StudentTableGateway $studentTG, Cookies $cookies)
     {
         $this->studentTG = $studentTG;
-        $this->cookie = $cookie;
+        $this->cookies = $cookies;
     }
 
     /**
@@ -34,7 +38,7 @@ class Authorization
      */
     public function makeAuth($hash): void
     {
-        $this->cookie->setCookie('hash', $hash, time() + 60 * 60 * 24 * 30 * 12 * 10);// Для идентификации пользователя.
+        $this->cookies->setCookie('hash', $hash, time() + 60 * 60 * 24 * 30 * 12 * 10);// Для идентификации пользователя.
     }
 
     /**
@@ -48,9 +52,9 @@ class Authorization
     /**
      * @return string
      */
-    public function getHash(): string
+    public function getHash()
     {
-        return $this->cookie->getCookie('hash');
+        return $this->cookies->getCookie('hash');
     }
 
     /**

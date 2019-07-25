@@ -4,73 +4,68 @@ namespace StudentList\core;
 
 use MainController;
 use ProfileController;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use StudentList\exceptions\ControllerException;
+use StudentList\model\Route;
 
 class Router
 {
-
-
-    /**
-     * @var \StudentList\helpers\DIContainer
-     */
-    private $di;
     /**
      * @var array
      */
-    private $routes = [
-        '/' => [
-            'Controller' => MainController::class,
-            'Action' => 'mainAction'
-        ],
-        '/profile' => [
-            'Controller' => ProfileController::class,
-            'Action' => 'profile'
-        ],
-        '/registration' => [
-            'Controller' => ProfileController::class,
-            'Action' => 'registration'
-        ]
-    ];
+    private $routes = [];
 
 
+
+    public function addRoute(string $pattern, string $action, Controller $controller){
+        $this->routes[] = new Route($controller,$pattern,$action);
+    }
     /**
-     * Router constructor.
-     * @param \StudentList\helpers\DIContainer $di
+     * @param $uri
+     * @return null
      */
-    public function __construct(\StudentList\helpers\DIContainer $di)
+    public function getController($uri)
     {
-        $this->di = $di;
+
+        foreach ($this->routes as $route) {
+
+            preg_match('~' . $uri . '~', $route->getPattern(), $match);
+
+            if ($match) {
+
+                return $route;
+            }
+        }
+        return null;
+
     }
 
     /**
      *
      */
-    public function run(): void
+
+    public function run(RequestInterface $request,ResponseInterface $response)
     {
-        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-        foreach ($this->routes as $route => $val) {
 
-            preg_match('~' . $uri . '~', $route, $match);
+        $match = $this->getController($request->getRequestTarget());
 
-            if (!empty($match)) {
-                $controller = $this->routes[$match[0]]['Controller'];
-                $action = $this->routes[$match[0]]['Action'];
-                break;
+        if (!empty($match)) {
 
-            } else {
-                $controller = null;
-            }
+            $controller = $match->getController();
+            $action = $match->getAction();
+
+
+        } else {
+            $controller = null;
+
         }
-        try {
-
             if ($controller !== null) {
-                $this->di->get($controller)->__invoke()->$action();
+               return $controller->$action( $request, $response);
             } else {
-                throw new ControllerException;
+                throw new ControllerException(404);
             }
-        } catch (ControllerException $e) {
-            $e->get404($uri);
-        }
+
     }
 }

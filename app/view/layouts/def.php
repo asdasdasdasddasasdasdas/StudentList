@@ -13,20 +13,28 @@
     <!-- JQuery -->
     <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/js/fontawesome.js"></script>
     <meta charset="utf-8">
     <title>StudentList</title>
 </head>
 <body>
+<header>
+
+    <nav class="navbar  navbar-expand-lg navbar-dark indigo">
+        <a class="navbar-brand" href=""><strong>StudentList</strong></a>
+    </nav>
+    </header>
 <div class="container-fluid">
 
 
     <div class="col-12 d-flex justify-content-center">
-        <?php require $path; ?>
+
+        <?php
+        require $path; ?>
     </div>
 
 
 </div>
-
 
 <!-- Bootstrap tooltips -->
 <script type="text/javascript"
