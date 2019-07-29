@@ -126,10 +126,11 @@ abstract class Message implements MessageInterface
      */
     public function withAddedHeader($name, $value)
     {
+
         $normalized = strtolower($name);
-        $header = $this->headerNames[$normalized];
+        $oldValues = $this->headers[$normalized];
         $clone = clone $this;
-        $clone->headers[$header] = array_merge($this->headers[$header], $value);
+        $clone->headers[$normalized] = array_merge([$oldValues], [$value]);
         return $clone;
     }
 
@@ -140,13 +141,12 @@ abstract class Message implements MessageInterface
     public function withoutHeader($name)
     {
 
-        if (!$this->hasHeader($header)) {
+        if (!$this->hasHeader($name)) {
             return clone $this;
         }
-        $normalized = strtolower($header);
-        $original = $this->headerNames[$normalized];
+        $normalized = strtolower($name);
         $clone = clone $this;
-        unset($clone->headers[$original], $clone->headerNames[$normalized]);
+        unset($clone->headers[$normalized]);
         return $clone;
     }
 

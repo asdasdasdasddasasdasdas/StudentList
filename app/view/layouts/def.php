@@ -23,7 +23,7 @@
     <nav class="navbar  navbar-expand-lg navbar-dark indigo">
         <a class="navbar-brand" href=""><strong>StudentList</strong></a>
     </nav>
-    </header>
+</header>
 <div class="container-fluid">
 
 

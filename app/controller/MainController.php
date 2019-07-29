@@ -7,7 +7,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use StudentList\core\View;
 
-class MainController extends \StudentList\core\Controller
+class MainController
 {
     /**
      * @var \StudentList\helpers\Authorization
@@ -37,8 +37,9 @@ class MainController extends \StudentList\core\Controller
     }
 
 
-    public function mainAction(RequestInterface $request,ResponseInterface $response)
+    public function mainAction(RequestInterface $request, ResponseInterface $response)
     {
+        $hash = $request->getCookieParams()['hash'];
         $queryParams = $request->getQueryParams();
         $limit = 5;
         $sort = empty($queryParams['sort']) ? null : trim(strval($queryParams['sort']));
@@ -55,6 +56,7 @@ class MainController extends \StudentList\core\Controller
             'students' => $students,
             'search' => $search,
             'paginator' => $paginator,
-            'auth' => $this->auth]);
+            'auth' => $this->auth,
+            'hash' => $hash]);
     }
 }

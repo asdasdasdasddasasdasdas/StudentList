@@ -36,6 +36,7 @@ class Request extends Message implements RequestInterface
      * @var
      */
     private $cookieParams;
+
     /**
      * Request constructor.
      * @param mixed $parsedBody
@@ -44,7 +45,7 @@ class Request extends Message implements RequestInterface
      * @param mixed $uri
      * @param $serverParams
      */
-    public function __construct($parsedBody, $queryParams, $method,UriInterface $uri,$headers, StreamInterface $body)
+    public function __construct($parsedBody, $queryParams, $method, UriInterface $uri, $headers, StreamInterface $body, $cookieParams)
     {
         $this->parsedBody = $parsedBody;
         $this->queryParams = $queryParams;
@@ -54,21 +55,32 @@ class Request extends Message implements RequestInterface
         $this->body = $body;
         $this->requestTarget = $uri->getPath();
 
+        $this->cookieParams = $cookieParams;
+
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCookieParams()
+    {
+        return $this->cookieParams;
     }
 
     /**
      * @param $server
      * @return Request
      */
-    static public function createFromGlobals($server) : RequestInterface
+    static public function createFromGlobals($server): RequestInterface
     {
         $uri = new Uri("http://studentlist{$server["REQUEST_URI"]}");
         $method = $server["REQUEST_METHOD"];
         $parsedBody = $_POST;
         $queryParams = $_GET;
+        $cookieParams = $_COOKIE;
         $body = new Stream(fopen('php://temp', 'w+'));
         $headers = self::filterHeaders($server);
-        $request = new self($parsedBody, $queryParams, $method, $uri, $headers, $body);
+        $request = new self($parsedBody, $queryParams, $method, $uri, $headers, $body, $cookieParams);
 
         return $request;
     }
@@ -76,7 +88,7 @@ class Request extends Message implements RequestInterface
     /**
      * @return mixed
      */
-    public function getMethod() : string
+    public function getMethod(): string
     {
         return $this->method;
     }
@@ -84,7 +96,7 @@ class Request extends Message implements RequestInterface
     /**
      * @return mixed
      */
-    public function getUri() : UriInterface
+    public function getUri(): UriInterface
     {
         return $this->uri;
     }
@@ -92,7 +104,7 @@ class Request extends Message implements RequestInterface
     /**
      * @return mixed
      */
-    public function getParsedBody() : array
+    public function getParsedBody(): array
     {
         return $this->parsedBody;
     }
@@ -100,7 +112,7 @@ class Request extends Message implements RequestInterface
     /**
      * @return mixed
      */
-    public function getQueryParams() : array
+    public function getQueryParams(): array
     {
         return $this->queryParams;
     }
@@ -109,7 +121,7 @@ class Request extends Message implements RequestInterface
      * @param string $method
      * @return RequestInterface|Request
      */
-    public function withMethod($method) :array
+    public function withMethod($method): array
     {
         $clone = clone $this;
         $clone->method = $method;
@@ -142,7 +154,7 @@ class Request extends Message implements RequestInterface
     /**
      * @return string
      */
-    public function getRequestTarget() : string
+    public function getRequestTarget(): string
     {
         return $this->requestTarget;
     }

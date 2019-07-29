@@ -2,6 +2,7 @@
 
 
 namespace StudentList\core;
+
 use Psr\Http\Message\ResponseInterface;
 use StudentList\http\Response;
 use StudentList\http\Stream;
@@ -46,18 +47,20 @@ class App
      */
     public function send(ResponseInterface $response)
     {
-        $reasonPhrase = $response->getReasonPhrase();
-        $headers = $response->getHeaders();
+        if (!headers_sent()) {
+            $reasonPhrase = $response->getReasonPhrase();
+            $headers = $response->getHeaders();
 
-        header(sprintf(
-            'HTTP/%s %d %s',
-            $response->getProtocolVersion(),
-            $response->getStatusCode(),
-            ($reasonPhrase ? ' ' . $reasonPhrase : '')));
+            header(sprintf(
+                'HTTP/%s %d %s',
+                $response->getProtocolVersion(),
+                $response->getStatusCode(),
+                ($reasonPhrase ? ' ' . $reasonPhrase : '')));
 
-        foreach($headers as $header => $value) {
-        header(sprintf("%s: %s", $header, $value), false);
-    }
+            foreach ($headers as $header => $value) {
+                header(sprintf("%s: %s", $header, $value), false);
+            }
+        }
 
         echo $response->getBody();
     }
@@ -69,16 +72,16 @@ class App
     {
         $response = new Response(new Stream(fopen('php://temp', 'w+')), $e->getCode(), $_SERVER);
 
-        if (method_exists($e,'getTemplatePath')) {
+        if (method_exists($e, 'getTemplatePath')) {
             $path = $e->getTemplatePath();
 
         } else {
 
-         $path = '../app/view/error.php';
+            $path = '../app/view/error.php';
 
         }
         ob_start();
-        extract(['e'=>$e]);
+        extract(['e' => $e]);
 
         require '../app/view/layouts/def.php';
         $body = $response->getBody();

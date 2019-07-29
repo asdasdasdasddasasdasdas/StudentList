@@ -3,7 +3,7 @@
 use StudentList\core\Router;
 use StudentList\core\App;
 
-ini_set('display_errors', -1);
+
 function d($n)
 {
     echo "<pre class = d>";
@@ -34,10 +34,14 @@ $router->addRoute("/profile", "profileAction", new \StudentList\controller\Profi
 ));
 
 $request = \StudentList\http\Request::createFromGlobals($_SERVER);
-$request = $request->withBody(new \StudentList\http\Stream(fopen('php://temp', 'w+')));
+
 
 
 $response = new \StudentList\http\Response( new \StudentList\http\Stream(fopen('php://temp', 'w+')),200,$_SERVER);
+
+
+
+
 $App = new App($router,$di);
 
 $App->start($request,$response);

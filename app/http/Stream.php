@@ -275,7 +275,6 @@ class Stream implements StreamInterface
         $resource = $stream;
         if (is_string($stream)) {
             $resource = fopen($stream, $mode);
-            restore_error_handler();
         }
 
         if ($stream !== $resource) {

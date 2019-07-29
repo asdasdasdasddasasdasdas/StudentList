@@ -2,6 +2,7 @@
 
 namespace StudentList\helpers;
 
+use Psr\Http\Message\ResponseInterface;
 use StudentList\model\Student;
 use StudentList\model\StudentTableGateway;
 
@@ -12,56 +13,46 @@ class Authorization
      * @var StudentTableGateway
      */
     private $studentTG;
-    /**
-     * @var Cookies
-     */
-    private $cookies;
 
     /**
      * Authorization constructor.
      * @param StudentTableGateway $studentTG
      */
-    public function __construct(StudentTableGateway $studentTG, Cookies $cookies)
+
+
+    public function __construct(StudentTableGateway $studentTG)
     {
         $this->studentTG = $studentTG;
-        $this->cookies = $cookies;
+
     }
-
-    /**
-     * Authorization constructor.
-     * @param $studentTG
-     */
-
 
     /**
      * @param $hash
      */
-    public function makeAuth($hash): void
+    public function makeAuth($response, $hash): ResponseInterface
     {
-        $this->cookies->setCookie('hash', $hash, time() + 60 * 60 * 24 * 30 * 12 * 10);// Для идентификации пользователя.
+        $d = time();
+        $response = $response->withHeader('Set-Cookie', "hash={$hash}; Max-Age={$d} + 60 * 60 * 24 * 30 * 12 * 10");        // Для идентификации пользователя.
+        return $response;
     }
 
     /**
      * @return bool
      */
-    public function IsLoggedIn(): bool
+    public function IsLoggedIn($hash = ''): bool
     {
-        return $this->studentTG->checkAuthUser($this->getHash());
-    }
-
-    /**
-     * @return string
-     */
-    public function getHash()
-    {
-        return $this->cookies->getCookie('hash');
+        if (isset($hash)) {
+            return $this->studentTG->checkAuthUser($hash);
+        } else {
+            return false;
+        }
     }
 
     /**
      * @return Student
      */
-    public function getAuthUser(): Student// Получение текущего пользователя.
+    public function getAuthUser($hash): Student// Получение текущего пользователя.
     {
-        return $this->studentTG->getStudentByHash($this->getHash());
+        return $this->studentTG->getStudentByHash($hash);
     }
 }

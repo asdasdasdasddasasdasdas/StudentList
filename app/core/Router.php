@@ -17,10 +17,11 @@ class Router
     private $routes = [];
 
 
-
-    public function addRoute(string $pattern, string $action, Controller $controller){
-        $this->routes[] = new Route($controller,$pattern,$action);
+    public function addRoute(string $pattern, string $action, $controller)
+    {
+        $this->routes[] = new Route($controller, $pattern, $action);
     }
+
     /**
      * @param $uri
      * @return null
@@ -45,7 +46,7 @@ class Router
      *
      */
 
-    public function run(RequestInterface $request,ResponseInterface $response)
+    public function run(RequestInterface $request, ResponseInterface $response)
     {
 
 
@@ -61,11 +62,11 @@ class Router
             $controller = null;
 
         }
-            if ($controller !== null) {
-               return $controller->$action( $request, $response);
-            } else {
-                throw new ControllerException(404);
-            }
+        if ($controller !== null && method_exists($controller, $action)) {
+            return $controller->$action($request, $response);
+        } else {
+            throw new ControllerException(404);
+        }
 
     }
 }

@@ -9,13 +9,13 @@
                 <button type="submit" class="btn btn-primary">Search</button>
 
                 <?php
-                if (!$auth->IsLoggedIn()) : ?>
+                if (!$auth->IsLoggedIn($hash)) : ?>
 
                     <a class="ml-5 btn-main btn btn-primary align-self-center"
                        href="/registration">Registrastion</a>
 
                 <?php endif; ?>
-                <?php if ($auth->IsLoggedIn()) : ?>
+                <?php if ($auth->IsLoggedIn($hash)) : ?>
                     <a class="ml-5 btn-main btn btn-primary align-self-center"
                        href="/profile">Profile</a>
                 <?php endif; ?>
@@ -29,8 +29,8 @@
 
 
                     <th class="col-2 px-5"> <?= $paginator->getSort() ?> <a class="text-white"
-                                                                          href="<?= $paginator->getSortLink(); ?>"
-                                                                          id="ege-link">Ege</a></th>
+                                                                            href="<?= $paginator->getSortLink(); ?>"
+                                                                            id="ege-link">Ege</a></th>
                     <th class="col-2 px-5">Group</th>
                     <th class="col-2 px-5">Email</th>
                     <th class="col-2 px-5">Gender</th>

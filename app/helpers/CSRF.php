@@ -9,40 +9,47 @@ class CSRF
     /**
      * @var Cookies
      */
-    private $cookies;
+    private $token;
 
-    /**
-     * CSRF constructor.
-     * @param Cookies $cookies
-     */
-    public function __construct(Cookies $cookies)
+    public function getToken()
     {
-        $this->cookies = $cookies;
+        return $this->token;
     }
 
     /**
      * @return string
      * @throws \Exception
      */
-    public function makeToken(): string
+    public function makeToken($response, $token)
     {
-        if ($this->cookies->issetCookie('token')) {
-            $token = $this->cookies->getCookie('token');
-            $this->cookies->setCookie('token', $token, time() + 3600);
+        if (!is_null($token)) {
+
+            $this->token = $token;
+            $d = time();
+            return $response = $response->withHeader('Set-Cookie', "token={$token}; Max-Age={$d} + 60 * 60");
         } else {
-            $token = bin2hex(random_bytes(32));
-            $this->cookies->setCookie('token', $token, time() + 3600);
+            $d = time();
+            $token = $this->generateToken();
+
+            return $response = $response->withHeader('Set-Cookie', "token={$token}; Max-Age={$d} + 3600");
         }
+    }
+
+
+    private function generateToken()
+    {
+        $token = bin2hex(random_bytes(32));
+        $this->token = $token;
         return $token;
     }
 
     /**
      * @return array
      */
-    public function checkToken($token)
+    public function checkToken($token, $cookieToken)
     {
 
-        if ($token !== $this->cookies->getCookie('token') || empty($token) || empty($this->cookies->getCookie('token'))) {
+        if ($token !== $cookieToken || empty($token) || empty($cookieToken)) {
             return 'Ошибка';
         }
         return null;
