@@ -1,0 +1,8 @@
+<?php
+return [
+    'host' => '',
+    'name' => '',
+    'user' => '',                  // Настройка базы данных.
+    'password' => '',
+    'charset' => ''
+];
