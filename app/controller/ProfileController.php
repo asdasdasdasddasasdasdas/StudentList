@@ -49,10 +49,7 @@ class ProfileController
     }
 
 
-    /**
-     * @throws \Exception
-     */
-    public function registrationAction(RequestInterface $request, ResponseInterface $response)
+      public function registrationAction(RequestInterface $request, ResponseInterface $response)
     {
         $hash = isset($request->getCookieParams()['hash']) ? $request->getCookieParams()['hash'] : '';
 
@@ -60,7 +57,7 @@ class ProfileController
         if (!$this->auth->IsLoggedIn($hash)) {
 
 
-            $cookieToken = !is_null($request->getCookieParams()['token']) ? $request->getCookieParams()['token'] : null;
+            $cookieToken = $request->getCookieParams()['token'] != '' ? $request->getCookieParams()['token'] : null;
 
             $response = $this->csrf->makeToken($response, $cookieToken);
 
@@ -103,12 +100,12 @@ class ProfileController
      */
     public function profileAction(RequestInterface $request, ResponseInterface $response)
     {
-
+       
         $hash = isset($request->getCookieParams()['hash']) ? $request->getCookieParams()['hash'] : '';
 
         if ($this->auth->IsLoggedIn($hash)) {
 
-            $cookieToken = isset($request->getCookieParams()['token']) ? $request->getCookieParams()['token'] : '';
+            $cookieToken = $request->getCookieParams()['token'] != '' ? $request->getCookieParams()['token'] : null;
 
             $response = $this->csrf->makeToken($response, $cookieToken);
 
