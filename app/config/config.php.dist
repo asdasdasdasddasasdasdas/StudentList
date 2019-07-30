@@ -2,7 +2,7 @@
 return [
     'host' => '',
     'name' => '',
-    'user' => '',                  // Настройка базы данных.
+    'user' => '',                  // Configure database
     'password' => '',
     'charset' => ''
 ];

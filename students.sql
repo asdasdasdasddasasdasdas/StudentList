@@ -21,7 +21,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `students` (
-  `hash` varchar(100) NOT NULL,
+  `hash` varchar(100) NOT NULL, /* For auth users */
   `id` int(11) NOT NULL,
   `name` varchar(20) NOT NULL,
   `surname` varchar(20) NOT NULL,
