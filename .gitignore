@@ -1,7 +1,5 @@
 
 .idea
 vendor
-.htaccess
 app/config/config.php
-composer.json
-composer.lock
+
