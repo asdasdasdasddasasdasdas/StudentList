@@ -12,4 +12,6 @@
 <li>PSR-4 autoloader implementation by Composer</li>
 </ol>
 
+<p>/app/config/config.php.dist Конфигурация базы данных</p>
+
 <p> Сайт на бесплатном хостинге <a href="https://bedrid-bunks.000webhostapp.com/">тут</a></p>
